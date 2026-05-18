@@ -1,10 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using DataAccessLayer.Repositories;
+using Models;
 
-namespace RestaurantApp.BusinessLogicLayer.Services
+namespace BusinessLogicLayer.Services;
+
+public class MenuService
 {
-    class MenuService
+    private readonly DishRepository _dishRepository;
+
+    public MenuService()
     {
+        _dishRepository = new DishRepository();
+    }
+
+    public List<Dish> GetMenu()
+    {
+        return _dishRepository.GetAllAvailable();
     }
 }

@@ -1,12 +1,731 @@
-﻿<Window x:Class="RestaurantApp.Views.Customer.MenuView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RestaurantApp.Views.Customer"
-        mc:Ignorable="d"
-        Title="MenuView" Height="450" Width="800">
+﻿<UserControl x:Class="RestaurantApp.Views.Customer.MenuView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+
+        <!-- TextBox Style -->
+
+        <Style x:Key="ModernTextBoxStyle"
+               TargetType="TextBox">
+
+            <Setter Property="BorderBrush"
+                    Value="#BBBBBB"/>
+
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+
+            <Setter Property="Height"
+                    Value="38"/>
+
+            <Setter Property="Padding"
+                    Value="12,5"/>
+
+            <Setter Property="FontSize"
+                    Value="14"/>
+
+            <Setter Property="Background"
+                    Value="White"/>
+
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="TextBox">
+
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+
+                            <ScrollViewer x:Name="PART_ContentHost"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsKeyboardFocused"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#5F5F5F"/>
+
+                                <Setter TargetName="Border"
+                                        Property="BorderThickness"
+                                        Value="1.5"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#5F5F5F"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+        <!-- ComboBox Style -->
+
+        <Style x:Key="ModernComboBoxStyle"
+               TargetType="ComboBox">
+
+            <Setter Property="Height"
+                    Value="38"/>
+
+            <Setter Property="FontSize"
+                    Value="14"/>
+
+            <Setter Property="Padding"
+                    Value="10,4"/>
+
+            <Setter Property="Background"
+                    Value="White"/>
+
+            <Setter Property="Foreground"
+                    Value="#333333"/>
+
+            <Setter Property="BorderBrush"
+                    Value="#BBBBBB"/>
+
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+
+            <Setter Property="VerticalContentAlignment"
+                    Value="Center"/>
+
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Left"/>
+
+            <Setter Property="SnapsToDevicePixels"
+                    Value="True"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ComboBox">
+
+                        <Grid>
+
+                            <!-- Main Border -->
+
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8">
+
+                                <Grid>
+
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="*"/>
+
+                                        <ColumnDefinition Width="40"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- Selected Item -->
+
+                                    <ContentPresenter Margin="12,0,0,0"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      Content="{TemplateBinding SelectionBoxItem}"/>
+
+                                    <!-- Arrow -->
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="▼"
+                                               FontSize="10"
+                                               Foreground="#666666"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+
+                                </Grid>
+
+                            </Border>
+
+                            <!-- Invisible Toggle -->
+
+                            <ToggleButton Background="Transparent"
+                                          BorderThickness="0"
+                                          Focusable="False"
+                                          ClickMode="Press"
+                                          Opacity="0"
+                                          IsChecked="{Binding IsDropDownOpen,
+                                                              RelativeSource={RelativeSource TemplatedParent},
+                                                              Mode=TwoWay}"/>
+
+                            <!-- Dropdown -->
+
+                            <Popup Name="Popup"
+                                   Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   PopupAnimation="Fade">
+
+                                <Border Margin="0,-2,0,0"
+                                        Width="{Binding ActualWidth,
+                                                        RelativeSource={RelativeSource TemplatedParent}}"
+                                        Background="White"
+                                        BorderBrush="#DDDDDD"
+                                        BorderThickness="1"
+                                        CornerRadius="0,0,8,8">
+
+                                    <ScrollViewer MaxHeight="220">
+
+                                        <ItemsPresenter/>
+
+                                    </ScrollViewer>
+
+                                </Border>
+
+                            </Popup>
+
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#5F5F5F"/>
+
+                            </Trigger>
+
+                            <!-- Focus -->
+
+                            <Trigger Property="IsKeyboardFocusWithin"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#5F5F5F"/>
+
+                                <Setter TargetName="Border"
+                                        Property="BorderThickness"
+                                        Value="1.5"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+        <!-- ComboBoxItem Style -->
+
+        <Style TargetType="ComboBoxItem">
+
+            <Setter Property="Foreground"
+                    Value="#333333"/>
+
+            <Setter Property="FontSize"
+                    Value="14"/>
+
+            <Setter Property="HorizontalContentAlignment"
+                    Value="Stretch"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ComboBoxItem">
+
+                        <Border x:Name="Border"
+                                Padding="12,8"
+                                Background="White">
+
+                            <ContentPresenter HorizontalAlignment="Left"
+                                              VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+
+                            <Trigger Property="IsHighlighted"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#EFEFEF"/>
+
+                            </Trigger>
+
+                            <!-- Selected -->
+
+                            <Trigger Property="IsSelected"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#E5E5E5"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+        <!-- CheckBox Style -->
+
+        <Style x:Key="ModernCheckBoxStyle"
+               TargetType="CheckBox">
+
+            <Setter Property="FontSize"
+                    Value="14"/>
+
+            <Setter Property="Foreground"
+                    Value="#333333"/>
+
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="CheckBox">
+
+                        <StackPanel Orientation="Horizontal">
+
+                            <!-- Box -->
+
+                            <Border x:Name="Border"
+                                    Width="18"
+                                    Height="18"
+                                    CornerRadius="4"
+                                    BorderBrush="#BBBBBB"
+                                    BorderThickness="1"
+                                    Background="White"
+                                    VerticalAlignment="Center">
+
+                                <TextBlock x:Name="CheckIcon"
+                                           Text="✓"
+                                           FontSize="12"
+                                           Foreground="White"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"
+                                           Visibility="Collapsed"/>
+
+                            </Border>
+
+                            <!-- Text -->
+
+                            <ContentPresenter Margin="10,0,0,0"
+                                              VerticalAlignment="Center"/>
+
+                        </StackPanel>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#5F5F5F"/>
+
+                            </Trigger>
+
+                            <!-- Checked -->
+
+                            <Trigger Property="IsChecked"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#5F5F5F"/>
+
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#5F5F5F"/>
+
+                                <Setter TargetName="CheckIcon"
+                                        Property="Visibility"
+                                        Value="Visible"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+        <!-- ScrollBar Style -->
+
+        <Style TargetType="ScrollBar">
+
+            <Setter Property="Width"
+                    Value="10"/>
+
+            <Setter Property="Background"
+                    Value="Transparent"/>
+
+        </Style>
+
+        <Style TargetType="Thumb">
+
+            <Setter Property="Background"
+                    Value="#C2C2C2"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Thumb">
+
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"/>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+        <!-- Button Style -->
+
+        <Style x:Key="ModernButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Height"
+                    Value="36"/>
+
+            <Setter Property="FontSize"
+                    Value="14"/>
+
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+
+            <Setter Property="Foreground"
+                    Value="White"/>
+
+            <Setter Property="Background"
+                    Value="#5F5F5F"/>
+
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#4D4D4D"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#3F3F3F"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+    </UserControl.Resources>
+
     <Grid>
-        
+
+        <Grid.RowDefinitions>
+
+            <RowDefinition Height="Auto"/>
+
+            <RowDefinition Height="*"/>
+
+        </Grid.RowDefinitions>
+
+        <!-- Filters -->
+
+        <Border Background="White"
+                CornerRadius="14"
+                BorderBrush="#DDDDDD"
+                BorderThickness="1"
+                Padding="18"
+                Margin="0,0,0,20">
+
+            <StackPanel>
+
+                <!-- Search + Category -->
+
+                <Grid>
+
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="2*"/>
+
+                        <ColumnDefinition Width="220"/>
+
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Search -->
+
+                    <TextBox Grid.Column="0"
+                             Style="{StaticResource ModernTextBoxStyle}"
+                             Text="{Binding SearchText,
+                                            UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <!-- Category -->
+
+                    <ComboBox Grid.Column="1"
+                              Margin="20,0,0,0"
+                              Style="{StaticResource ModernComboBoxStyle}"
+                              ItemsSource="{Binding Categories}"
+                              SelectedItem="{Binding SelectedCategory}"/>
+
+                </Grid>
+
+                <!-- Allergens -->
+
+                <StackPanel Orientation="Horizontal"
+                            Margin="0,18,0,0">
+
+                    <CheckBox Content="Fără Gluten"
+                              Margin="0,0,20,0"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              IsChecked="{Binding ExcludeGluten}"/>
+
+                    <CheckBox Content="Fără Lactoză"
+                              Margin="0,0,20,0"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              IsChecked="{Binding ExcludeLactose}"/>
+
+                    <CheckBox Content="Fără Ouă"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              IsChecked="{Binding ExcludeEggs}"/>
+
+                </StackPanel>
+
+            </StackPanel>
+
+        </Border>
+
+        <!-- Dishes -->
+
+        <ScrollViewer Grid.Row="1"
+                      VerticalScrollBarVisibility="Auto">
+
+            <ItemsControl ItemsSource="{Binding Dishes}">
+
+                <ItemsControl.ItemsPanel>
+
+                    <ItemsPanelTemplate>
+
+                        <WrapPanel ItemWidth="280"/>
+
+                    </ItemsPanelTemplate>
+
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+
+                    <DataTemplate>
+
+                        <Border Width="260"
+                                Height="360"
+                                Margin="10"
+                                Padding="18"
+                                Background="White"
+                                CornerRadius="14"
+                                BorderBrush="#DDDDDD"
+                                BorderThickness="1">
+
+                            <Grid>
+
+                                <Grid.RowDefinitions>
+
+                                    <RowDefinition Height="*"/>
+
+                                    <RowDefinition Height="Auto"/>
+
+                                </Grid.RowDefinitions>
+
+                                <!-- Content -->
+
+                                <StackPanel>
+
+                                    <!-- Dish Name -->
+
+                                    <TextBlock Text="{Binding Name}"
+                                               FontSize="20"
+                                               FontWeight="Bold"
+                                               Foreground="#333333"
+                                               TextWrapping="Wrap"
+                                               MinHeight="52"/>
+
+                                    <!-- Category -->
+
+                                    <TextBlock Text="{Binding Category.Name}"
+                                               FontSize="13"
+                                               Foreground="#888888"
+                                               Margin="0,4,0,12"/>
+
+                                    <!-- Price -->
+
+                                    <TextBlock FontSize="18"
+                                               FontWeight="SemiBold"
+                                               Foreground="#5F5F5F">
+
+                                        <Run Text="{Binding Price}"/>
+
+                                        <Run Text=" RON"/>
+
+                                    </TextBlock>
+
+                                    <!-- Portion -->
+
+                                    <TextBlock Margin="0,6,0,0"
+                                               Foreground="#666666">
+
+                                        <Run Text="{Binding PortionQuantity}"/>
+
+                                        <Run Text=" "/>
+
+                                        <Run Text="{Binding Unit}"/>
+
+                                    </TextBlock>
+
+                                    <!-- Allergens -->
+
+                                    <ItemsControl Margin="0,14,0,0"
+                                                  ItemsSource="{Binding DishAllergens}">
+
+                                        <ItemsControl.ItemsPanel>
+
+                                            <ItemsPanelTemplate>
+
+                                                <WrapPanel/>
+
+                                            </ItemsPanelTemplate>
+
+                                        </ItemsControl.ItemsPanel>
+
+                                        <ItemsControl.ItemTemplate>
+
+                                            <DataTemplate>
+
+                                                <Border Background="#EFEFEF"
+                                                        CornerRadius="6"
+                                                        Margin="0,0,6,6"
+                                                        Padding="8,4">
+
+                                                    <TextBlock Text="{Binding Allergen.Name}"
+                                                               FontSize="12"
+                                                               Foreground="#666666"/>
+
+                                                </Border>
+
+                                            </DataTemplate>
+
+                                        </ItemsControl.ItemTemplate>
+
+                                    </ItemsControl>
+
+                                    <!-- Availability -->
+
+                                    <TextBlock Text="Available"
+                                               Foreground="#3A8F3A"
+                                               FontWeight="SemiBold"
+                                               Margin="0,10,0,0"/>
+
+                                </StackPanel>
+
+                                <!-- Button -->
+
+                                <Button Grid.Row="1"
+                                        Content="Add to Cart"
+                                        Style="{StaticResource ModernButtonStyle}"/>
+
+                            </Grid>
+
+                        </Border>
+
+                    </DataTemplate>
+
+                </ItemsControl.ItemTemplate>
+
+            </ItemsControl>
+
+        </ScrollViewer>
+
     </Grid>
-</Window>
+
+</UserControl>

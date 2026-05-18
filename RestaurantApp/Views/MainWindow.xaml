@@ -3,10 +3,12 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:RestaurantApp.Views.Customer"
         mc:Ignorable="d"
         Title="Restaurant App"
-        Height="750"
-        Width="1200"
+        Height="760"
+        Width="940"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         Background="#F4F4F4">
 
@@ -108,31 +110,43 @@
 
                 </Grid.ColumnDefinitions>
 
-                <!-- Logo / Title -->
+                <!-- Logo -->
 
                 <StackPanel Orientation="Horizontal"
                             VerticalAlignment="Center">
 
                     <TextBlock Text="🍽"
                                FontSize="28"
-                               Margin="0,0,10,0"/>
+                               Margin="0,0,10,0"
+                               VerticalAlignment="Center"/>
 
                     <TextBlock Text="Restaurant App"
                                FontSize="28"
                                FontWeight="Bold"
-                               Foreground="#333333"/>
+                               Foreground="#333333"
+                               VerticalAlignment="Center"/>
 
                 </StackPanel>
 
                 <!-- Right Side -->
 
-                <StackPanel Grid.Column="1"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center">
+                <Grid Grid.Column="1"
+                      VerticalAlignment="Center">
+
+                    <Grid.ColumnDefinitions>
+
+                        <ColumnDefinition Width="Auto"/>
+
+                        <ColumnDefinition Width="Auto"/>
+
+                        <ColumnDefinition Width="Auto"/>
+
+                    </Grid.ColumnDefinitions>
 
                     <!-- Welcome -->
 
-                    <TextBlock Text="{Binding WelcomeText}"
+                    <TextBlock Grid.Column="0"
+                               Text="{Binding WelcomeText}"
                                VerticalAlignment="Center"
                                Margin="0,0,18,0"
                                FontSize="15"
@@ -141,7 +155,9 @@
 
                     <!-- Guest Buttons -->
 
-                    <StackPanel Orientation="Horizontal"
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
                                 Visibility="{Binding GuestButtonsVisibility}">
 
                         <Button Content="Login"
@@ -159,39 +175,25 @@
 
                     <!-- Logout -->
 
-                    <Button Content="Logout"
+                    <Button Grid.Column="2"
+                            VerticalAlignment="Center"
+                            Content="Logout"
                             Width="100"
                             Style="{StaticResource ModernButtonStyle}"
                             Command="{Binding LogoutCommand}"
                             Visibility="{Binding LogoutButtonVisibility}"/>
 
-                </StackPanel>
+                </Grid>
 
             </Grid>
 
         </Border>
 
-        <!-- Main Content -->
+        <!-- Content -->
 
         <Grid Margin="30,105,30,30">
 
-            <Border Background="White"
-                    CornerRadius="14"
-                    BorderBrush="#DDDDDD"
-                    BorderThickness="1">
-
-                <Grid>
-
-                    <TextBlock Text="Restaurant Menu Coming Soon..."
-                               FontSize="36"
-                               FontWeight="Bold"
-                               Foreground="#777777"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
-
-                </Grid>
-
-            </Border>
+            <views:MenuView/>
 
         </Grid>
 
