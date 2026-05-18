@@ -186,8 +186,6 @@ public static class DbSeeder
 
             Unit = "g",
 
-            ImagePath = "",
-
             IsAvailable = true,
 
             CategoryId = pizzaCategory.Id
@@ -204,8 +202,6 @@ public static class DbSeeder
             TotalQuantity = 8600,
 
             Unit = "g",
-
-            ImagePath = "",
 
             IsAvailable = true,
 
@@ -224,8 +220,6 @@ public static class DbSeeder
 
             Unit = "g",
 
-            ImagePath = "",
-
             IsAvailable = true,
 
             CategoryId = burgerCategory.Id
@@ -243,8 +237,6 @@ public static class DbSeeder
 
             Unit = "g",
 
-            ImagePath = "",
-
             IsAvailable = true,
 
             CategoryId = burgerCategory.Id
@@ -258,11 +250,9 @@ public static class DbSeeder
 
             PortionQuantity = 350,
 
-            TotalQuantity = 7000,
+            TotalQuantity = 3,
 
             Unit = "g",
-
-            ImagePath = "",
 
             IsAvailable = true,
 
@@ -281,8 +271,6 @@ public static class DbSeeder
 
             Unit = "g",
 
-            ImagePath = "",
-
             IsAvailable = true,
 
             CategoryId = dessertCategory.Id
@@ -299,8 +287,6 @@ public static class DbSeeder
             TotalQuantity = 3000,
 
             Unit = "g",
-
-            ImagePath = "",
 
             IsAvailable = true,
 
@@ -319,12 +305,31 @@ public static class DbSeeder
 
             Unit = "ml",
 
-            ImagePath = "",
-
             IsAvailable = true,
 
             CategoryId = drinksCategory.Id
-        }
+        },
+
+        new Dish
+        {
+            Name = "Supă de Legume",
+            Price = 24.99m,
+            PortionQuantity = 350,
+            TotalQuantity = 2,
+            Unit = "g",
+            CategoryId = 2
+        },
+
+        new Dish
+        {
+            Name = "Macaroane cu brânză",
+            Price = 49.99m,
+            PortionQuantity = 450,
+            TotalQuantity = 1,
+            Unit = "g",
+            CategoryId = 3
+        },
+
         ];
 
         context.Dishes.AddRange(dishes);

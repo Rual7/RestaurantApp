@@ -42,7 +42,7 @@ public class MainWindowViewModel
     }
 
     // =====================================================
-    // Auth
+    // AUTH
     // =====================================================
 
     public bool IsAuthenticated =>
@@ -60,7 +60,7 @@ public class MainWindowViewModel
         UserRole.Employee;
 
     // =====================================================
-    // Welcome
+    // WELCOME
     // =====================================================
 
     public string WelcomeText
@@ -78,7 +78,24 @@ public class MainWindowViewModel
     }
 
     // =====================================================
-    // Visibility
+    // MAIN CONTENT
+    // =====================================================
+
+    public object MainContentView
+    {
+        get
+        {
+            if (IsEmployee)
+            {
+                return new EmployeeView();
+            }
+
+            return new MenuView();
+        }
+    }
+
+    // =====================================================
+    // VISIBILITY
     // =====================================================
 
     public Visibility GuestButtonsVisibility =>
@@ -92,7 +109,7 @@ public class MainWindowViewModel
             : Visibility.Collapsed;
 
     // =====================================================
-    // Cart
+    // CART
     // =====================================================
 
     public GridLength CartColumnWidth =>
@@ -101,7 +118,7 @@ public class MainWindowViewModel
             : new GridLength(0);
 
     // =====================================================
-    // Commands
+    // COMMANDS
     // =====================================================
 
     public ICommand OpenLoginCommand
@@ -130,7 +147,7 @@ public class MainWindowViewModel
     }
 
     // =====================================================
-    // Login
+    // LOGIN
     // =====================================================
 
     private void OpenLogin()
@@ -143,9 +160,8 @@ public class MainWindowViewModel
         RefreshUI();
     }
 
-
     // =====================================================
-    // Register
+    // REGISTER
     // =====================================================
 
     private void OpenRegister()
@@ -159,7 +175,7 @@ public class MainWindowViewModel
     }
 
     // =====================================================
-    // Logout
+    // LOGOUT
     // =====================================================
 
     private void Logout()
@@ -170,7 +186,7 @@ public class MainWindowViewModel
     }
 
     // =====================================================
-    // Client Orders
+    // CLIENT ORDERS
     // =====================================================
 
     private void OpenOrders()
@@ -204,7 +220,7 @@ public class MainWindowViewModel
     }
 
     // =====================================================
-    // Employee Orders
+    // EMPLOYEE ORDERS
     // =====================================================
 
     private void OpenEmployeeOrders()
@@ -238,7 +254,7 @@ public class MainWindowViewModel
     }
 
     // =====================================================
-    // Refresh
+    // REFRESH
     // =====================================================
 
     private void RefreshUI()
@@ -252,6 +268,8 @@ public class MainWindowViewModel
         OnPropertyChanged(nameof(IsEmployee));
 
         OnPropertyChanged(nameof(WelcomeText));
+
+        OnPropertyChanged(nameof(MainContentView));
 
         OnPropertyChanged(nameof(GuestButtonsVisibility));
 

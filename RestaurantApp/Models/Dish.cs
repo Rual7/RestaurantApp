@@ -23,9 +23,6 @@ public class Dish
     [MaxLength(20)]
     public string Unit { get; set; }
 
-    [MaxLength(500)]
-    public string ImagePath { get; set; }
-
     public bool IsAvailable { get; set; } = true;
 
     public int CategoryId { get; set; }

@@ -68,7 +68,6 @@ namespace RestaurantApp.Migrations
                     PortionQuantity = table.Column<double>(type: "double precision", nullable: false),
                     TotalQuantity = table.Column<double>(type: "double precision", nullable: false),
                     Unit = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
-                    ImagePath = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     IsAvailable = table.Column<bool>(type: "boolean", nullable: false),
                     CategoryId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -114,10 +113,10 @@ namespace RestaurantApp.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     OrderCode = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    FoodCost = table.Column<decimal>(type: "numeric", nullable: false),
-                    DeliveryFee = table.Column<decimal>(type: "numeric", nullable: false),
-                    DiscountAmount = table.Column<decimal>(type: "numeric", nullable: false),
-                    TotalCost = table.Column<decimal>(type: "numeric", nullable: false),
+                    FoodCost = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    DeliveryFee = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    DiscountAmount = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
+                    TotalCost = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     EstimatedDeliveryTime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Status = table.Column<int>(type: "integer", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
@@ -189,7 +188,7 @@ namespace RestaurantApp.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false),
+                    Price = table.Column<decimal>(type: "numeric(18,2)", nullable: false),
                     OrderId = table.Column<int>(type: "integer", nullable: false),
                     DishId = table.Column<int>(type: "integer", nullable: true),
                     MenuId = table.Column<int>(type: "integer", nullable: true)
