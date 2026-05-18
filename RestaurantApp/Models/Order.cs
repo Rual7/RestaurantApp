@@ -1,12 +1,16 @@
-﻿using Models.Enums;
-using RestaurantApp.Models;
+﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
+using Models.Enums;
 
 namespace Models;
 
+[Index(nameof(OrderCode), IsUnique = true)]
 public class Order
 {
     public int Id { get; set; }
 
+    [Required]
+    [MaxLength(50)]
     public string OrderCode { get; set; }
 
     public DateTime CreatedAt { get; set; }

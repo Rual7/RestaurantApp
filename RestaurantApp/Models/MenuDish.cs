@@ -1,4 +1,6 @@
-﻿namespace Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Models;
 
 public class MenuDish
 {
@@ -10,5 +12,6 @@ public class MenuDish
 
     public Dish Dish { get; set; }
 
+    [Range(1, 10000)]
     public double Quantity { get; set; }
 }
