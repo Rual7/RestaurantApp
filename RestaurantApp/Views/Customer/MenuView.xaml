@@ -516,15 +516,15 @@
         <!-- Filters -->
 
         <Border Background="White"
-                CornerRadius="14"
-                BorderBrush="#DDDDDD"
-                BorderThickness="1"
-                Padding="18"
-                Margin="0,0,0,20">
+        CornerRadius="14"
+        BorderBrush="#DDDDDD"
+        BorderThickness="1"
+        Padding="18"
+        Margin="0,0,0,20">
 
             <StackPanel>
 
-                <!-- Search + Category -->
+                <!-- Search + Category + Allergen -->
 
                 <Grid>
 
@@ -534,45 +534,34 @@
 
                         <ColumnDefinition Width="220"/>
 
+                        <ColumnDefinition Width="220"/>
+
                     </Grid.ColumnDefinitions>
 
                     <!-- Search -->
 
                     <TextBox Grid.Column="0"
-                             Style="{StaticResource ModernTextBoxStyle}"
-                             Text="{Binding SearchText,
-                                            UpdateSourceTrigger=PropertyChanged}"/>
+                     Style="{StaticResource ModernTextBoxStyle}"
+                     Text="{Binding SearchText,
+                                    UpdateSourceTrigger=PropertyChanged}"/>
 
                     <!-- Category -->
 
                     <ComboBox Grid.Column="1"
-                              Margin="20,0,0,0"
-                              Style="{StaticResource ModernComboBoxStyle}"
-                              ItemsSource="{Binding Categories}"
-                              SelectedItem="{Binding SelectedCategory}"/>
+                      Margin="20,0,0,0"
+                      Style="{StaticResource ModernComboBoxStyle}"
+                      ItemsSource="{Binding Categories}"
+                      SelectedItem="{Binding SelectedCategory}"/>
+
+                    <!-- Allergen -->
+
+                    <ComboBox Grid.Column="2"
+                      Margin="20,0,0,0"
+                      Style="{StaticResource ModernComboBoxStyle}"
+                      ItemsSource="{Binding Allergens}"
+                      SelectedItem="{Binding SelectedAllergen}"/>
 
                 </Grid>
-
-                <!-- Allergens -->
-
-                <StackPanel Orientation="Horizontal"
-                            Margin="0,18,0,0">
-
-                    <CheckBox Content="Fără Gluten"
-                              Margin="0,0,20,0"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              IsChecked="{Binding ExcludeGluten}"/>
-
-                    <CheckBox Content="Fără Lactoză"
-                              Margin="0,0,20,0"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              IsChecked="{Binding ExcludeLactose}"/>
-
-                    <CheckBox Content="Fără Ouă"
-                              Style="{StaticResource ModernCheckBoxStyle}"
-                              IsChecked="{Binding ExcludeEggs}"/>
-
-                </StackPanel>
 
             </StackPanel>
 
@@ -708,11 +697,33 @@
 
                                 </StackPanel>
 
-                                <!-- Button -->
+                                <!-- Buttons -->
 
-                                <Button Grid.Row="1"
-                                        Content="Add to Cart"
-                                        Style="{StaticResource ModernButtonStyle}"/>
+                                <Grid Grid.Row="1">
+
+                                    <!-- Client Button -->
+
+                                    <Button Content="Add to Cart"
+                                            Style="{StaticResource ModernButtonStyle}"
+                                            Command="{Binding DataContext.AddToCartCommand,
+                                                              RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.IsClient,
+                                                                 RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                 Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                    <!-- Guest Button -->
+
+                                    <Button Content="Login to Order"
+                                            Style="{StaticResource ModernButtonStyle}"
+                                            Background="#B5B5B5"
+                                            Cursor="Arrow"
+                                            IsEnabled="False"
+                                            Visibility="{Binding DataContext.IsClient,
+                                                                 RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                 Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+
+                                </Grid>
 
                             </Grid>
 

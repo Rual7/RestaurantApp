@@ -46,5 +46,25 @@ public class RestaurantDbContext : DbContext
 
         modelBuilder.Entity<MenuDish>()
             .HasKey(md => new { md.MenuId, md.DishId });
+
+        modelBuilder.Entity<OrderItem>()
+            .Property(orderItem => orderItem.Price)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Order>()
+            .Property(order => order.FoodCost)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Order>()
+            .Property(order => order.DeliveryFee)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Order>()
+            .Property(order => order.DiscountAmount)
+            .HasColumnType("decimal(18,2)");
+
+        modelBuilder.Entity<Order>()
+            .Property(order => order.TotalCost)
+            .HasColumnType("decimal(18,2)");
     }
 }

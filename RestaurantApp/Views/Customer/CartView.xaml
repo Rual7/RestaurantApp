@@ -1,12 +1,319 @@
-﻿<Window x:Class="RestaurantApp.Views.Customer.CartView"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RestaurantApp.Views.Customer"
-        mc:Ignorable="d"
-        Title="CartView" Height="450" Width="800">
+﻿<UserControl x:Class="RestaurantApp.Views.Customer.CartView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+
+    <UserControl.Resources>
+
+        <!-- Cart Button Style -->
+
+        <Style x:Key="CartButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Height"
+                    Value="34"/>
+
+            <Setter Property="Padding"
+                    Value="10,4"/>
+
+            <Setter Property="Background"
+                    Value="#5F5F5F"/>
+
+            <Setter Property="Foreground"
+                    Value="White"/>
+
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#4D4D4D"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#3F3F3F"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+    </UserControl.Resources>
+
     <Grid>
-        
+
+        <Border Background="White"
+                CornerRadius="14"
+                BorderBrush="#DDDDDD"
+                BorderThickness="1"
+                Padding="20">
+
+            <Grid>
+
+                <Grid.RowDefinitions>
+
+                    <RowDefinition Height="Auto"/>
+
+                    <RowDefinition Height="*"/>
+
+                    <RowDefinition Height="Auto"/>
+
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+
+                <TextBlock Text="🛒 Your Cart"
+                           FontSize="24"
+                           FontWeight="Bold"
+                           Foreground="#333333"/>
+
+                <!-- Empty -->
+
+                <TextBlock Grid.Row="1"
+                           Text="Cart is empty"
+                           FontSize="16"
+                           Foreground="#888888"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Visibility="{Binding IsEmpty,
+                                                Mode=OneWay,
+                                                Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                <!-- Items -->
+
+                <ScrollViewer Grid.Row="1"
+                              Margin="0,20,0,20"
+                              VerticalScrollBarVisibility="Auto">
+
+                    <ItemsControl ItemsSource="{Binding Items,
+                                                        Mode=OneWay}">
+
+                        <ItemsControl.Style>
+
+                            <Style TargetType="ItemsControl">
+
+                                <Setter Property="Visibility"
+                                        Value="Visible"/>
+
+                                <Style.Triggers>
+
+                                    <DataTrigger Binding="{Binding IsEmpty,
+                                                                   Mode=OneWay}"
+                                                 Value="True">
+
+                                        <Setter Property="Visibility"
+                                                Value="Collapsed"/>
+
+                                    </DataTrigger>
+
+                                </Style.Triggers>
+
+                            </Style>
+
+                        </ItemsControl.Style>
+
+                        <ItemsControl.ItemTemplate>
+
+                            <DataTemplate>
+
+                                <Border Margin="0,0,0,14"
+                                        Padding="14"
+                                        Background="#FAFAFA"
+                                        CornerRadius="10"
+                                        BorderBrush="#E5E5E5"
+                                        BorderThickness="1">
+
+                                    <StackPanel>
+
+                                        <!-- Name -->
+
+                                        <TextBlock Text="{Binding Dish.Name,
+                                                                  Mode=OneWay}"
+                                                   FontSize="16"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#333333"
+                                                   TextWrapping="Wrap"/>
+
+                                        <!-- Price -->
+
+                                        <TextBlock Margin="0,4,0,10"
+                                                   Foreground="#666666">
+
+                                            <Run Text="{Binding TotalPrice,
+                                                                Mode=OneWay}"/>
+
+                                            <Run Text=" RON"/>
+
+                                        </TextBlock>
+
+                                        <!-- Controls -->
+
+                                        <Grid>
+
+                                            <Grid.ColumnDefinitions>
+
+                                                <ColumnDefinition Width="Auto"/>
+
+                                                <ColumnDefinition Width="Auto"/>
+
+                                                <ColumnDefinition Width="Auto"/>
+
+                                                <ColumnDefinition Width="*"/>
+
+                                                <ColumnDefinition Width="Auto"/>
+
+                                            </Grid.ColumnDefinitions>
+
+                                            <!-- Minus -->
+
+                                            <Button Grid.Column="0"
+                                                    Width="30"
+                                                    Content="-"
+                                                    Style="{StaticResource CartButtonStyle}"
+                                                    Command="{Binding DataContext.DecreaseQuantityCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"/>
+
+                                            <!-- Quantity -->
+
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Quantity,
+                                                                      Mode=OneWay}"
+                                                       VerticalAlignment="Center"
+                                                       FontWeight="SemiBold"
+                                                       Margin="12,0"/>
+
+                                            <!-- Plus -->
+
+                                            <Button Grid.Column="2"
+                                                    Width="30"
+                                                    Content="+"
+                                                    Style="{StaticResource CartButtonStyle}"
+                                                    Command="{Binding DataContext.IncreaseQuantityCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"/>
+
+                                            <!-- Remove -->
+
+                                            <Button Grid.Column="4"
+                                                    Width="34"
+                                                    Content="🗑"
+                                                    FontSize="14"
+                                                    Style="{StaticResource CartButtonStyle}"
+                                                    Command="{Binding DataContext.RemoveItemCommand,
+                                                                      RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"/>
+
+                                        </Grid>
+
+                                    </StackPanel>
+
+                                </Border>
+
+                            </DataTemplate>
+
+                        </ItemsControl.ItemTemplate>
+
+                    </ItemsControl>
+
+                </ScrollViewer>
+
+                <!-- Footer -->
+
+                <StackPanel Grid.Row="2">
+
+                    <!-- Total -->
+
+                    <Grid Margin="0,0,0,14">
+
+                        <Grid.ColumnDefinitions>
+
+                            <ColumnDefinition Width="*"/>
+
+                            <ColumnDefinition Width="Auto"/>
+
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Text="Total"
+                                   FontSize="18"
+                                   FontWeight="SemiBold"
+                                   Foreground="#333333"/>
+
+                        <TextBlock Grid.Column="1"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="#5F5F5F">
+
+                            <Run Text="{Binding Total,
+                                                Mode=OneWay}"/>
+
+                            <Run Text=" RON"/>
+
+                        </TextBlock>
+
+                    </Grid>
+
+                    <!-- Clear -->
+
+                    <Button Content="Clear Cart"
+                            Height="40"
+                            Style="{StaticResource CartButtonStyle}"
+                            Command="{Binding ClearCartCommand}"/>
+
+                    <!-- Order -->
+
+                    <Button Content="Place Order"
+                            Height="40"
+                            Margin="0,10,0,0"
+                            Style="{StaticResource CartButtonStyle}"
+                            Command="{Binding PlaceOrderCommand}"/>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Border>
+
     </Grid>
-</Window>
+
+</UserControl>

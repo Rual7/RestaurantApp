@@ -9,6 +9,7 @@ public partial class MenuView : UserControl
     {
         InitializeComponent();
 
-        DataContext = new MenuViewModel();
+        DataContext =
+            new MenuViewModel();
     }
 }
