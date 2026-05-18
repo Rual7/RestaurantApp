@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using RestaurantApp.Models;
 
-namespace RestaurantApp.Models
+namespace Models;
+
+public class Allergen
 {
-    class Allergen
-    {
-    }
+    public int Id { get; set; }
+
+    public string Name { get; set; }
+
+    public ICollection<DishAllergen> DishAllergens { get; set; }
+        = new List<DishAllergen>();
 }

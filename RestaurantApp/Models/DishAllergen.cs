@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Models;
 
-namespace RestaurantApp.Models
+public class DishAllergen
 {
-    class DishAllergen
-    {
-    }
+    public int DishId { get; set; }
+
+    public Dish Dish { get; set; }
+
+    public int AllergenId { get; set; }
+
+    public Allergen Allergen { get; set; }
 }

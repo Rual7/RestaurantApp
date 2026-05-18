@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Models.Enums;
 
-namespace RestaurantApp.Models.Enums
+public enum OrderStatus
 {
-    class OrderStatus
-    {
-    }
+    Registered,
+    Preparing,
+    OnTheWay,
+    Delivered,
+    Cancelled
 }

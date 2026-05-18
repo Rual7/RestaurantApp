@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace Models.Enums;
 
-namespace RestaurantApp.Models.Enums
+public enum UserRole
 {
-    class UserRole
-    {
-    }
+    Client,
+    Employee
 }
