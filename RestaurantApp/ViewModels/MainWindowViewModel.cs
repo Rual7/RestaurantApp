@@ -1,8 +1,10 @@
 ﻿// MainWindowViewModel.cs
 
 using BusinessLogicLayer.Helpers;
+using Models.Enums;
 using RestaurantApp.Views.Auth;
 using RestaurantApp.Views.Customer;
+using RestaurantApp.Views.Employee;
 using RestaurantApp.Views.Shared;
 using System.Windows;
 using System.Windows.Input;
@@ -10,7 +12,8 @@ using System.Windows.Media;
 
 namespace ViewModels;
 
-public class MainWindowViewModel : BaseViewModel
+public class MainWindowViewModel
+    : BaseViewModel
 {
     public MainWindowViewModel()
     {
@@ -22,87 +25,80 @@ public class MainWindowViewModel : BaseViewModel
             new RelayCommand(
                 _ => OpenRegister());
 
-        OpenOrdersCommand =
-            new RelayCommand(
-                _ => OpenOrders());
-
         LogoutCommand =
             new RelayCommand(
                 _ => Logout());
 
+        OpenOrdersCommand =
+            new RelayCommand(
+                _ => OpenOrders());
+
+        OpenEmployeeOrdersCommand =
+            new RelayCommand(
+                _ => OpenEmployeeOrders());
+
         SessionManager.AuthenticationChanged +=
             RefreshUI;
-
-        RefreshUI();
     }
 
     // =====================================================
-    // Welcome Text
+    // Auth
     // =====================================================
 
-    private string _welcomeText =
-        "Welcome, Guest";
+    public bool IsAuthenticated =>
+        SessionManager.IsAuthenticated;
+
+    public bool IsGuest =>
+        !SessionManager.IsAuthenticated;
+
+    public bool IsClient =>
+        SessionManager.CurrentUser?.Role ==
+        UserRole.Client;
+
+    public bool IsEmployee =>
+        SessionManager.CurrentUser?.Role ==
+        UserRole.Employee;
+
+    // =====================================================
+    // Welcome
+    // =====================================================
 
     public string WelcomeText
     {
-        get => _welcomeText;
-        set => SetProperty(
-            ref _welcomeText,
-            value);
+        get
+        {
+            if (!SessionManager.IsAuthenticated)
+            {
+                return "Welcome, Guest";
+            }
+
+            return
+                $"Welcome, {SessionManager.CurrentUser!.FirstName}";
+        }
     }
 
     // =====================================================
     // Visibility
     // =====================================================
 
-    private Visibility _guestButtonsVisibility;
+    public Visibility GuestButtonsVisibility =>
+        IsGuest
+            ? Visibility.Visible
+            : Visibility.Collapsed;
 
-    public Visibility GuestButtonsVisibility
-    {
-        get => _guestButtonsVisibility;
-        set => SetProperty(
-            ref _guestButtonsVisibility,
-            value);
-    }
-
-    private Visibility _logoutButtonVisibility;
-
-    public Visibility LogoutButtonVisibility
-    {
-        get => _logoutButtonVisibility;
-        set => SetProperty(
-            ref _logoutButtonVisibility,
-            value);
-    }
+    public Visibility LogoutButtonVisibility =>
+        IsAuthenticated
+            ? Visibility.Visible
+            : Visibility.Collapsed;
 
     // =====================================================
-    // Client
+    // Cart
     // =====================================================
 
-    private bool _isClient;
-
-    public bool IsClient
-    {
-        get => _isClient;
-        set => SetProperty(
-            ref _isClient,
-            value);
-    }
-
-    // =====================================================
-    // Cart Column
-    // =====================================================
-
-    private GridLength _cartColumnWidth =
-        new(0);
-
-    public GridLength CartColumnWidth
-    {
-        get => _cartColumnWidth;
-        set => SetProperty(
-            ref _cartColumnWidth,
-            value);
-    }
+    public GridLength CartColumnWidth =>
+        IsClient
+            ? new GridLength(1, GridUnitType.Star)
+            : new GridLength(0);
 
     // =====================================================
     // Commands
@@ -118,58 +114,23 @@ public class MainWindowViewModel : BaseViewModel
         get;
     }
 
-    public ICommand OpenOrdersCommand
-    {
-        get;
-    }
-
     public ICommand LogoutCommand
     {
         get;
     }
 
-    // =====================================================
-    // UI
-    // =====================================================
-
-    public void RefreshUI()
+    public ICommand OpenOrdersCommand
     {
-        IsClient =
-            SessionManager.IsClient;
+        get;
+    }
 
-        CartColumnWidth =
-            IsClient
-                ? new GridLength(
-                    1.2,
-                    GridUnitType.Star)
-                : new GridLength(0);
-
-        if (!SessionManager.IsAuthenticated)
-        {
-            WelcomeText =
-                "Welcome, Guest";
-
-            GuestButtonsVisibility =
-                Visibility.Visible;
-
-            LogoutButtonVisibility =
-                Visibility.Collapsed;
-
-            return;
-        }
-
-        WelcomeText =
-            $"Welcome, {SessionManager.CurrentUser!.FirstName}";
-
-        GuestButtonsVisibility =
-            Visibility.Collapsed;
-
-        LogoutButtonVisibility =
-            Visibility.Visible;
+    public ICommand OpenEmployeeOrdersCommand
+    {
+        get;
     }
 
     // =====================================================
-    // Auth
+    // Login
     // =====================================================
 
     private void OpenLogin()
@@ -178,7 +139,14 @@ public class MainWindowViewModel : BaseViewModel
             new();
 
         loginView.ShowDialog();
+
+        RefreshUI();
     }
+
+
+    // =====================================================
+    // Register
+    // =====================================================
 
     private void OpenRegister()
     {
@@ -186,18 +154,41 @@ public class MainWindowViewModel : BaseViewModel
             new();
 
         registerView.ShowDialog();
+
+        RefreshUI();
     }
+
+    // =====================================================
+    // Logout
+    // =====================================================
+
+    private void Logout()
+    {
+        SessionManager.Logout();
+
+        RefreshUI();
+    }
+
+    // =====================================================
+    // Client Orders
+    // =====================================================
 
     private void OpenOrders()
     {
         Window window =
             new()
             {
-                Title = "My Orders",
+                Title =
+                    "My Orders",
 
-                Height = 560,
+                Content =
+                    new OrdersView(),
 
-                Width = 420,
+                Width =
+                    420,
+
+                Height =
+                    560,
 
                 ResizeMode =
                     ResizeMode.NoResize,
@@ -206,23 +197,66 @@ public class MainWindowViewModel : BaseViewModel
                     WindowStartupLocation.CenterScreen,
 
                 Background =
-                    new SolidColorBrush(
-                        (Color)ColorConverter.ConvertFromString(
-                            "#F5F5F5")),
-
-                Content =
-                    new OrdersView()
+                    Brushes.White
             };
 
         window.ShowDialog();
     }
 
-    private void Logout()
-    {
-        SessionManager.Logout();
+    // =====================================================
+    // Employee Orders
+    // =====================================================
 
-        CustomMessageBox.Show(
-            "Logout",
-            "You have been logged out successfully.");
+    private void OpenEmployeeOrders()
+    {
+        Window window =
+            new()
+            {
+                Title =
+                    "Orders Management",
+
+                Content =
+                    new EmployeeOrdersView(),
+
+                Width =
+                    420,
+
+                Height =
+                    560,
+
+                ResizeMode =
+                    ResizeMode.NoResize,
+
+                WindowStartupLocation =
+                    WindowStartupLocation.CenterScreen,
+
+                Background =
+                    Brushes.White
+            };
+
+        window.ShowDialog();
+    }
+
+    // =====================================================
+    // Refresh
+    // =====================================================
+
+    private void RefreshUI()
+    {
+        OnPropertyChanged(nameof(IsAuthenticated));
+
+        OnPropertyChanged(nameof(IsGuest));
+
+        OnPropertyChanged(nameof(IsClient));
+
+        OnPropertyChanged(nameof(IsEmployee));
+
+        OnPropertyChanged(nameof(WelcomeText));
+
+        OnPropertyChanged(nameof(GuestButtonsVisibility));
+
+        OnPropertyChanged(nameof(LogoutButtonVisibility));
+
+        OnPropertyChanged(nameof(CartColumnWidth));
     }
 }

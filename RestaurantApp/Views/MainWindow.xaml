@@ -173,7 +173,7 @@
                         <!-- My Orders -->
 
                         <TextBlock Grid.Row="1"
-                                   Text="my orders"
+                                   Text="my-orders"
                                    Margin="0,2,0,0"
                                    FontSize="13"
                                    FontWeight="SemiBold"
@@ -187,6 +187,28 @@
 
                                 <MouseBinding MouseAction="LeftClick"
                                               Command="{Binding OpenOrdersCommand}"/>
+
+                            </TextBlock.InputBindings>
+
+                        </TextBlock>
+
+                        <!-- View Orders -->
+
+                        <TextBlock Grid.Row="1"
+                                   Text="view-orders"
+                                   Margin="0,2,0,0"
+                                   FontSize="13"
+                                   FontWeight="SemiBold"
+                                   Foreground="#555555"
+                                   Cursor="Hand"
+                                   HorizontalAlignment="Center"
+                                   Visibility="{Binding IsEmployee,
+                                        Converter={StaticResource BooleanToVisibilityConverter}}">
+
+                            <TextBlock.InputBindings>
+
+                                <MouseBinding MouseAction="LeftClick"
+                          Command="{Binding OpenEmployeeOrdersCommand}"/>
 
                             </TextBlock.InputBindings>
 

@@ -254,4 +254,34 @@ public class OrderService
                 .Substring(0, 8)
                 .ToUpper()}";
     }
+
+
+    // =====================================================
+    // Employee Orders
+    // =====================================================
+
+    public List<Order> GetAllOrders()
+    {
+        return _orderRepository
+            .GetAllOrders();
+    }
+
+    public List<Order> GetAllActiveOrders()
+    {
+        return _orderRepository
+            .GetAllActiveOrders();
+    }
+
+    // =====================================================
+    // Update Status
+    // =====================================================
+
+    public void UpdateStatus(
+        int orderId,
+        OrderStatus status)
+    {
+        _orderRepository.UpdateStatus(
+            orderId,
+            status);
+    }
 }

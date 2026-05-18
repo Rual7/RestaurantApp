@@ -33,4 +33,8 @@ public class Order
 
     public ICollection<OrderItem> OrderItems { get; set; }
         = new List<OrderItem>();
+
+    public bool CanEditStatus =>
+        Status != OrderStatus.Delivered &&
+        Status != OrderStatus.Cancelled;
 }

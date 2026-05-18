@@ -10,7 +10,7 @@ namespace DataAccessLayer.Repositories;
 public class OrderRepository
 {
     // =====================================================
-    // Get All Orders By User
+    // User Orders
     // =====================================================
 
     public List<Order> GetOrdersByUser(
@@ -28,7 +28,7 @@ public class OrderRepository
     }
 
     // =====================================================
-    // Get Active Orders
+    // Active User Orders
     // =====================================================
 
     public List<Order> GetActiveOrdersByUser(
@@ -49,6 +49,43 @@ public class OrderRepository
     }
 
     // =====================================================
+    // All Orders
+    // =====================================================
+
+    public List<Order> GetAllOrders()
+    {
+        using RestaurantDbContext context =
+            new();
+
+        return context.Orders
+            .Include(order => order.User)
+            .Include(order => order.OrderItems)
+                .ThenInclude(orderItem => orderItem.Dish)
+            .OrderByDescending(order => order.CreatedAt)
+            .ToList();
+    }
+
+    // =====================================================
+    // Active Orders
+    // =====================================================
+
+    public List<Order> GetAllActiveOrders()
+    {
+        using RestaurantDbContext context =
+            new();
+
+        return context.Orders
+            .Include(order => order.User)
+            .Include(order => order.OrderItems)
+                .ThenInclude(orderItem => orderItem.Dish)
+            .Where(order =>
+                order.Status != OrderStatus.Delivered &&
+                order.Status != OrderStatus.Cancelled)
+            .OrderByDescending(order => order.CreatedAt)
+            .ToList();
+    }
+
+    // =====================================================
     // Cancel Order
     // =====================================================
 
@@ -61,19 +98,17 @@ public class OrderRepository
 
         Order? order =
             context.Orders.FirstOrDefault(
-                o =>
-                    o.Id == orderId &&
-                    o.UserId == userId);
+                order =>
+                    order.Id == orderId &&
+                    order.UserId == userId);
 
         if (order == null)
         {
             return false;
         }
 
-        // already finished
-
-        if (order.Status == OrderStatus.Delivered ||
-            order.Status == OrderStatus.Cancelled)
+        if (order.Status ==
+            OrderStatus.Delivered)
         {
             return false;
         }
@@ -84,5 +119,30 @@ public class OrderRepository
         context.SaveChanges();
 
         return true;
+    }
+
+    // =====================================================
+    // Update Status
+    // =====================================================
+
+    public void UpdateStatus(
+        int orderId,
+        OrderStatus status)
+    {
+        using RestaurantDbContext context =
+            new();
+
+        Order? order =
+            context.Orders.FirstOrDefault(
+                order => order.Id == orderId);
+
+        if (order == null)
+        {
+            return;
+        }
+
+        order.Status = status;
+
+        context.SaveChanges();
     }
 }

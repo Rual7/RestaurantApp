@@ -1,6 +1,6 @@
-﻿<!-- OrdersView.xaml -->
+﻿<!-- EmployeeOrdersView.xaml -->
 
-<UserControl x:Class="RestaurantApp.Views.Customer.OrdersView"
+<UserControl x:Class="RestaurantApp.Views.Employee.EmployeeOrdersView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              Background="#F5F5F5">
@@ -8,7 +8,7 @@
     <UserControl.Resources>
 
         <!-- ===================================================== -->
-        <!-- ScrollBar Style -->
+        <!-- ScrollBar -->
         <!-- ===================================================== -->
 
         <Style TargetType="ScrollBar">
@@ -44,7 +44,7 @@
         </Style>
 
         <!-- ===================================================== -->
-        <!-- CheckBox Style -->
+        <!-- CheckBox -->
         <!-- ===================================================== -->
 
         <Style x:Key="ModernCheckBoxStyle"
@@ -130,23 +130,23 @@
         </Style>
 
         <!-- ===================================================== -->
-        <!-- Button Style -->
+        <!-- Button -->
         <!-- ===================================================== -->
 
         <Style x:Key="TopBarButtonStyle"
                TargetType="Button">
 
             <Setter Property="Height"
-                    Value="40"/>
+                    Value="38"/>
 
             <Setter Property="MinWidth"
-                    Value="90"/>
+                    Value="110"/>
 
             <Setter Property="Padding"
                     Value="18,8"/>
 
             <Setter Property="FontSize"
-                    Value="14"/>
+                    Value="13"/>
 
             <Setter Property="FontWeight"
                     Value="SemiBold"/>
@@ -163,9 +163,6 @@
             <Setter Property="Cursor"
                     Value="Hand"/>
 
-            <Setter Property="VerticalAlignment"
-                    Value="Center"/>
-
             <Setter Property="Template">
 
                 <Setter.Value>
@@ -174,7 +171,7 @@
 
                         <Border x:Name="Border"
                                 Background="{TemplateBinding Background}"
-                                CornerRadius="10">
+                                CornerRadius="9">
 
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"/>
@@ -201,6 +198,148 @@
 
                             </Trigger>
 
+                            <Trigger Property="IsEnabled"
+                                     Value="False">
+
+                                <Setter TargetName="Border"
+                                        Property="Opacity"
+                                        Value="0.5"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+        <!-- ===================================================== -->
+        <!-- ComboBox -->
+        <!-- ===================================================== -->
+
+        <Style x:Key="ModernComboBoxStyle"
+               TargetType="ComboBox">
+
+            <Setter Property="Height"
+                    Value="36"/>
+
+            <Setter Property="FontSize"
+                    Value="13"/>
+
+            <Setter Property="Padding"
+                    Value="10,4"/>
+
+            <Setter Property="Background"
+                    Value="White"/>
+
+            <Setter Property="Foreground"
+                    Value="#333333"/>
+
+            <Setter Property="BorderBrush"
+                    Value="#BBBBBB"/>
+
+            <Setter Property="BorderThickness"
+                    Value="1"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="ComboBox">
+
+                        <Grid>
+
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8">
+
+                                <Grid>
+
+                                    <Grid.ColumnDefinitions>
+
+                                        <ColumnDefinition Width="*"/>
+
+                                        <ColumnDefinition Width="40"/>
+
+                                    </Grid.ColumnDefinitions>
+
+                                    <ContentPresenter Margin="12,0,0,0"
+                                                      VerticalAlignment="Center"
+                                                      HorizontalAlignment="Left"
+                                                      Content="{TemplateBinding SelectionBoxItem}"/>
+
+                                    <TextBlock Grid.Column="1"
+                                               Text="▼"
+                                               FontSize="10"
+                                               Foreground="#666666"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+
+                                </Grid>
+
+                            </Border>
+
+                            <ToggleButton Background="Transparent"
+                                          BorderThickness="0"
+                                          Focusable="False"
+                                          ClickMode="Press"
+                                          Opacity="0"
+                                          IsChecked="{Binding IsDropDownOpen,
+                                                              RelativeSource={RelativeSource TemplatedParent},
+                                                              Mode=TwoWay}"/>
+
+                            <Popup Placement="Bottom"
+                                   AllowsTransparency="True"
+                                   Focusable="False"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   PopupAnimation="Fade">
+
+                                <Border Margin="0,-2,0,0"
+                                        Width="{Binding ActualWidth,
+                                                        RelativeSource={RelativeSource TemplatedParent}}"
+                                        Background="White"
+                                        BorderBrush="#DDDDDD"
+                                        BorderThickness="1"
+                                        CornerRadius="0,0,8,8">
+
+                                    <ScrollViewer MaxHeight="220">
+
+                                        <ItemsPresenter/>
+
+                                    </ScrollViewer>
+
+                                </Border>
+
+                            </Popup>
+
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#5F5F5F"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsKeyboardFocusWithin"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="BorderBrush"
+                                        Value="#5F5F5F"/>
+
+                            </Trigger>
+
                         </ControlTemplate.Triggers>
 
                     </ControlTemplate>
@@ -215,11 +354,9 @@
 
     <Grid Background="#F5F5F5">
 
-        <!-- ===================================================== -->
-        <!-- Top Bar -->
-        <!-- ===================================================== -->
+        <!-- TOP -->
 
-        <Border Height="70"
+        <Border Height="82"
                 VerticalAlignment="Top"
                 Background="White"
                 BorderBrush="#DDDDDD"
@@ -227,49 +364,39 @@
 
             <Grid Margin="20,0">
 
-                <Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
 
-                    <ColumnDefinition Width="*"/>
+                    <!-- TITLE -->
 
-                    <ColumnDefinition Width="Auto"/>
+                    <StackPanel Orientation="Horizontal">
 
-                </Grid.ColumnDefinitions>
+                        <TextBlock Text="📦"
+                                   FontSize="24"
+                                   Margin="0,0,10,0"/>
 
-                <!-- Left -->
+                        <TextBlock Text="Orders Management"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="#333333"/>
 
-                <StackPanel Orientation="Horizontal"
-                            VerticalAlignment="Center">
+                    </StackPanel>
 
-                    <TextBlock Text="📦"
-                               FontSize="24"
-                               Margin="0,0,10,0"
-                               VerticalAlignment="Center"/>
+                    <!-- FILTER -->
 
-                    <TextBlock Text="My Orders"
-                               FontSize="24"
-                               FontWeight="Bold"
-                               Foreground="#333333"
-                               VerticalAlignment="Center"/>
+                    <CheckBox Margin="34,6,0,0"
+                              Content="Show only active"
+                              Style="{StaticResource ModernCheckBoxStyle}"
+                              IsChecked="{Binding ShowOnlyActive}"/>
 
                 </StackPanel>
-
-                <!-- Right -->
-
-                <CheckBox Grid.Column="1"
-                          Content="Show only active"
-                          VerticalAlignment="Center"
-                          Style="{StaticResource ModernCheckBoxStyle}"
-                          IsChecked="{Binding ShowOnlyActive}"/>
 
             </Grid>
 
         </Border>
 
-        <!-- ===================================================== -->
-        <!-- Orders -->
-        <!-- ===================================================== -->
+        <!-- ORDERS -->
 
-        <ScrollViewer Margin="20,95,14,20"
+        <ScrollViewer Margin="20,105,14,20"
                       Padding="0,0,6,0"
                       VerticalScrollBarVisibility="Auto">
 
@@ -278,8 +405,6 @@
                 <ItemsControl.ItemTemplate>
 
                     <DataTemplate>
-
-                        <!-- ORDER CARD -->
 
                         <Border Margin="0,0,0,16"
                                 Padding="18"
@@ -290,7 +415,7 @@
 
                             <StackPanel>
 
-                                <!-- TOP -->
+                                <!-- HEADER -->
 
                                 <Grid>
 
@@ -312,7 +437,6 @@
                                                    Foreground="#333333"/>
 
                                         <TextBlock Margin="0,4,0,0"
-                                                   FontSize="13"
                                                    Foreground="#777777">
 
                                             <Run Text="{Binding CreatedAt,
@@ -321,6 +445,8 @@
                                         </TextBlock>
 
                                     </StackPanel>
+
+                                    <!-- STATUS -->
 
                                     <TextBlock Grid.Column="1"
                                                VerticalAlignment="Center"
@@ -338,8 +464,6 @@
 
                                                 <Style.Triggers>
 
-                                                    <!-- Cancelled -->
-
                                                     <DataTrigger Binding="{Binding Status}"
                                                                  Value="Cancelled">
 
@@ -347,8 +471,6 @@
                                                                 Value="#666666"/>
 
                                                     </DataTrigger>
-
-                                                    <!-- Delivered -->
 
                                                     <DataTrigger Binding="{Binding Status}"
                                                                  Value="Delivered">
@@ -368,13 +490,44 @@
 
                                 </Grid>
 
+                                <!-- CLIENT -->
+
+                                <StackPanel Margin="0,18,0,0">
+
+                                    <TextBlock Text="Client"
+                                               FontWeight="Bold"
+                                               FontSize="14"
+                                               Foreground="#444444"/>
+
+                                    <TextBlock Margin="0,8,0,0"
+                                               Foreground="#555555">
+
+                                        <Run Text="{Binding User.FirstName}"/>
+
+                                        <Run Text=" "/>
+
+                                        <Run Text="{Binding User.LastName}"/>
+
+                                    </TextBlock>
+
+                                    <TextBlock Margin="0,4,0,0"
+                                               Text="{Binding User.PhoneNumber}"
+                                               Foreground="#666666"/>
+
+                                    <TextBlock Margin="0,4,0,0"
+                                               Text="{Binding User.Address}"
+                                               Foreground="#666666"
+                                               TextWrapping="Wrap"/>
+
+                                </StackPanel>
+
                                 <!-- PRODUCTS -->
 
                                 <StackPanel Margin="0,18,0,0">
 
                                     <TextBlock Text="Products"
+                                               FontWeight="Bold"
                                                FontSize="14"
-                                               FontWeight="SemiBold"
                                                Foreground="#444444"/>
 
                                     <ItemsControl Margin="0,10,0,0"
@@ -387,16 +540,12 @@
                                                 <StackPanel Margin="0,0,0,8"
                                                             Orientation="Horizontal">
 
-                                                    <!-- NAME -->
-
                                                     <TextBlock Text="{Binding Dish.Name}"
                                                                Foreground="#555555"/>
 
-                                                    <!-- PRICE -->
-
                                                     <TextBlock Margin="10,0,0,0"
-                                                               Foreground="#666666"
-                                                               FontWeight="SemiBold">
+                                                               FontWeight="SemiBold"
+                                                               Foreground="#666666">
 
                                                         <Run Text="{Binding Price,
                                                             StringFormat={}{0:F2}}"/>
@@ -405,11 +554,9 @@
 
                                                     </TextBlock>
 
-                                                    <!-- QUANTITY -->
-
                                                     <TextBlock Margin="10,0,0,0"
-                                                               Foreground="#777777"
-                                                               FontWeight="SemiBold">
+                                                               FontWeight="SemiBold"
+                                                               Foreground="#777777">
 
                                                         <Run Text="x "/>
 
@@ -429,11 +576,9 @@
 
                                 </StackPanel>
 
-                                <!-- PRICE DETAILS -->
+                                <!-- TOTALS -->
 
                                 <StackPanel Margin="0,18,0,0">
-
-                                    <!-- TOTAL PRICE -->
 
                                     <Grid Margin="0,0,0,4">
 
@@ -445,11 +590,10 @@
 
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="Total Price:"
+                                        <TextBlock Text="Food Cost:"
                                                    Foreground="#555555"/>
 
                                         <TextBlock Grid.Column="1"
-                                                   Foreground="#555555"
                                                    FontWeight="SemiBold">
 
                                             <Run Text="{Binding FoodCost,
@@ -460,8 +604,6 @@
                                         </TextBlock>
 
                                     </Grid>
-
-                                    <!-- DELIVERY -->
 
                                     <Grid Margin="0,0,0,4">
 
@@ -477,7 +619,6 @@
                                                    Foreground="#555555"/>
 
                                         <TextBlock Grid.Column="1"
-                                                   Foreground="#555555"
                                                    FontWeight="SemiBold">
 
                                             <Run Text="{Binding DeliveryFee,
@@ -489,8 +630,6 @@
 
                                     </Grid>
 
-                                    <!-- DISCOUNT -->
-
                                     <Grid>
 
                                         <Grid.ColumnDefinitions>
@@ -501,12 +640,12 @@
 
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Text="Discounts:"
+                                        <TextBlock Text="Discount:"
                                                    Foreground="#3A8F3A"/>
 
                                         <TextBlock Grid.Column="1"
-                                                   Foreground="#3A8F3A"
-                                                   FontWeight="SemiBold">
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#3A8F3A">
 
                                             <Run Text="-"/>
 
@@ -527,7 +666,7 @@
                                         Height="1"
                                         Background="#E5E5E5"/>
 
-                                <!-- FINAL TOTAL -->
+                                <!-- FINAL -->
 
                                 <Grid>
 
@@ -539,7 +678,7 @@
 
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="Final Total Price:"
+                                    <TextBlock Text="Final Total:"
                                                FontSize="16"
                                                FontWeight="Bold"
                                                Foreground="#333333"/>
@@ -558,59 +697,70 @@
 
                                 </Grid>
 
-                                <!-- DELIVERY TIME -->
+                                <!-- DELIVERY -->
 
                                 <TextBlock Margin="0,10,0,0"
                                            Text="{Binding EstimatedDeliveryTime,
                                             StringFormat='Estimated delivery: {0:HH:mm}'}"
                                            Foreground="#666666"/>
 
-                                <!-- CANCEL -->
+                                <!-- STATUS MANAGEMENT -->
 
-                                <Button Width="140"
-                                        Margin="0,18,0,0"
-                                        HorizontalAlignment="Left"
-                                        Content="Cancel Order"
-                                        Command="{Binding DataContext.CancelOrderCommand,
-                                            RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                        CommandParameter="{Binding}">
+                                <Border Margin="0,18,0,0"
+                                        Padding="14"
+                                        Background="#FAFAFA"
+                                        BorderBrush="#E5E5E5"
+                                        BorderThickness="1"
+                                        CornerRadius="10">
 
-                                    <Button.Style>
+                                    <Grid>
 
-                                        <Style TargetType="Button"
-                                               BasedOn="{StaticResource TopBarButtonStyle}">
+                                        <Grid.ColumnDefinitions>
 
-                                            <Style.Triggers>
+                                            <ColumnDefinition Width="*"/>
 
-                                                <DataTrigger Binding="{Binding Status}"
-                                                             Value="Cancelled">
+                                            <ColumnDefinition Width="130"/>
 
-                                                    <Setter Property="IsEnabled"
-                                                            Value="False"/>
+                                        </Grid.ColumnDefinitions>
 
-                                                    <Setter Property="Opacity"
-                                                            Value="0.55"/>
+                                        <!-- LABEL -->
 
-                                                </DataTrigger>
+                                        <StackPanel VerticalAlignment="Center">
 
-                                                <DataTrigger Binding="{Binding Status}"
-                                                             Value="Delivered">
+                                            <TextBlock Text="Update Status"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="#333333"/>
 
-                                                    <Setter Property="IsEnabled"
-                                                            Value="False"/>
+                                            <TextBlock Margin="0,3,0,0"
+                                                       Text="Modify current order status"
+                                                       FontSize="12"
+                                                       Foreground="#888888"/>
 
-                                                    <Setter Property="Opacity"
-                                                            Value="0.55"/>
+                                        </StackPanel>
 
-                                                </DataTrigger>
+                                        <!-- CONTROLS -->
 
-                                            </Style.Triggers>
+                                        <StackPanel Grid.Column="1">
 
-                                        </Style>
+                                            <ComboBox Style="{StaticResource ModernComboBoxStyle}"
+                                                      ItemsSource="{Binding DataContext.Statuses,
+                                                        RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                      SelectedItem="{Binding Status}"
+                                                      IsEnabled="{Binding CanEditStatus}"/>
 
-                                    </Button.Style>
+                                            <Button Margin="0,10,0,0"
+                                                    Content="Save"
+                                                    Style="{StaticResource TopBarButtonStyle}"
+                                                    IsEnabled="{Binding CanEditStatus}"
+                                                    Command="{Binding DataContext.UpdateStatusCommand,
+                                                        RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                    CommandParameter="{Binding}"/>
 
-                                </Button>
+                                        </StackPanel>
+
+                                    </Grid>
+
+                                </Border>
 
                             </StackPanel>
 
