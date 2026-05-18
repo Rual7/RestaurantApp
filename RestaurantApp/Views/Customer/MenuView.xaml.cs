@@ -3,7 +3,8 @@ using ViewModels;
 
 namespace RestaurantApp.Views.Customer;
 
-public partial class MenuView : UserControl
+public partial class MenuView
+    : UserControl
 {
     public MenuView()
     {

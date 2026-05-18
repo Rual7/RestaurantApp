@@ -9,7 +9,8 @@ public static class DbSeeder
 {
     public static void Seed()
     {
-        using RestaurantDbContext context = new();
+        using RestaurantDbContext context =
+            new();
 
         SeedEmployee(context);
 
@@ -20,44 +21,50 @@ public static class DbSeeder
         SeedDishes(context);
 
         SeedDishAllergens(context);
+
+        SeedMenus(context);
+
+        SeedMenuDishes(context);
     }
 
-    // =========================================================
-    // Employee
-    // =========================================================
+    #region Employee
 
     private static void SeedEmployee(
         RestaurantDbContext context)
     {
-        bool employeeExists = context.Users.Any(
-            user => user.Email == "employee@restaurant.com");
+        bool employeeExists =
+            context.Users.Any(
+                user =>
+                    user.Email ==
+                    "employee@restaurant.com");
 
         if (employeeExists)
         {
             return;
         }
 
-        User employee = new()
-        {
-            FirstName = "Test Employee",
-            LastName = "Test Employee",
-            Email = "employee@restaurant.com",
-            PhoneNumber = "0712345678",
-            Address = "Restaurant HQ",
-            PasswordHash =
-                PasswordHelper.HashPassword("test123"),
-
-            Role = UserRole.Employee
-        };
+        User employee =
+            new()
+            {
+                FirstName = "Employee",
+                LastName = "Employee",
+                Email = "employee@restaurant.com",
+                PhoneNumber = "0712345678",
+                Address = "Restaurant HQ",
+                PasswordHash =
+                    PasswordHelper.HashPassword(
+                        "test123"),
+                Role = UserRole.Employee
+            };
 
         context.Users.Add(employee);
 
         context.SaveChanges();
     }
 
-    // =========================================================
-    // Categories
-    // =========================================================
+    #endregion
+
+    #region Categories
 
     private static void SeedCategories(
         RestaurantDbContext context)
@@ -69,30 +76,14 @@ public static class DbSeeder
 
         List<Category> categories =
         [
-            new Category
-            {
-                Name = "Pizza"
-            },
-
-            new Category
-            {
-                Name = "Burgeri"
-            },
-
-            new Category
-            {
-                Name = "Paste"
-            },
-
-            new Category
-            {
-                Name = "Desert"
-            },
-
-            new Category
-            {
-                Name = "Băuturi"
-            }
+            new() { Name = "Pizza" },
+            new() { Name = "Burgeri" },
+            new() { Name = "Paste" },
+            new() { Name = "Desert" },
+            new() { Name = "Băuturi" },
+            new() { Name = "Supe" },
+            new() { Name = "Salate" },
+            new() { Name = "Mic Dejun" }
         ];
 
         context.Categories.AddRange(categories);
@@ -100,9 +91,9 @@ public static class DbSeeder
         context.SaveChanges();
     }
 
-    // =========================================================
-    // Allergens
-    // =========================================================
+    #endregion
+
+    #region Allergens
 
     private static void SeedAllergens(
         RestaurantDbContext context)
@@ -114,25 +105,13 @@ public static class DbSeeder
 
         List<Allergen> allergens =
         [
-            new Allergen
-            {
-                Name = "Gluten"
-            },
-
-            new Allergen
-            {
-                Name = "Lactoză"
-            },
-
-            new Allergen
-            {
-                Name = "Ouă"
-            },
-
-            new Allergen
-            {
-                Name = "Arahide"
-            }
+            new() { Name = "Gluten" },
+            new() { Name = "Lactoză" },
+            new() { Name = "Ouă" },
+            new() { Name = "Arahide" },
+            new() { Name = "Soia" },
+            new() { Name = "Pește" },
+            new() { Name = "Țelină" }
         ];
 
         context.Allergens.AddRange(allergens);
@@ -140,196 +119,272 @@ public static class DbSeeder
         context.SaveChanges();
     }
 
-    // =========================================================
-    // Dishes
-    // =========================================================
+    #endregion
+
+    #region Dishes
 
     private static void SeedDishes(
-    RestaurantDbContext context)
+        RestaurantDbContext context)
     {
         if (context.Dishes.Any())
         {
             return;
         }
 
-        Category pizzaCategory =
-            context.Categories.First(
-                category => category.Name == "Pizza");
-
-        Category burgerCategory =
-            context.Categories.First(
-                category => category.Name == "Burgeri");
-
-        Category pastaCategory =
-            context.Categories.First(
-                category => category.Name == "Paste");
-
-        Category dessertCategory =
-            context.Categories.First(
-                category => category.Name == "Desert");
-
-        Category drinksCategory =
-            context.Categories.First(
-                category => category.Name == "Băuturi");
+        Dictionary<string, int> categories =
+            context.Categories
+                .ToDictionary(
+                    category => category.Name,
+                    category => category.Id);
 
         List<Dish> dishes =
         [
-            new Dish
-        {
-            Name = "Pizza Quattro Formaggi",
+            // Pizza
 
-            Price = 39.99m,
+            new()
+            {
+                Name = "Pizza Quattro Formaggi",
+                Price = 39.99m,
+                PortionQuantity = 450,
+                TotalQuantity = 9000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Pizza"]
+            },
 
-            PortionQuantity = 450,
+            new()
+            {
+                Name = "Pizza Diavola",
+                Price = 37.99m,
+                PortionQuantity = 430,
+                TotalQuantity = 8600,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Pizza"]
+            },
 
-            TotalQuantity = 9000,
+            new()
+            {
+                Name = "Pizza Prosciutto",
+                Price = 36.99m,
+                PortionQuantity = 420,
+                TotalQuantity = 5000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Pizza"]
+            },
 
-            Unit = "g",
+            // Burgers
 
-            IsAvailable = true,
+            new()
+            {
+                Name = "Burger Clasic",
+                Price = 34.99m,
+                PortionQuantity = 400,
+                TotalQuantity = 6000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Burgeri"]
+            },
 
-            CategoryId = pizzaCategory.Id
-        },
+            new()
+            {
+                Name = "Burger Crispy",
+                Price = 35.99m,
+                PortionQuantity = 420,
+                TotalQuantity = 5000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Burgeri"]
+            },
 
-        new Dish
-        {
-            Name = "Pizza Diavola",
+            new()
+            {
+                Name = "Cheese Burger",
+                Price = 38.99m,
+                PortionQuantity = 430,
+                TotalQuantity = 4000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Burgeri"]
+            },
 
-            Price = 37.99m,
+            // Pasta
 
-            PortionQuantity = 430,
+            new()
+            {
+                Name = "Paste Carbonara",
+                Price = 36.99m,
+                PortionQuantity = 350,
+                TotalQuantity = 3,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Paste"]
+            },
 
-            TotalQuantity = 8600,
+            new()
+            {
+                Name = "Paste Alfredo",
+                Price = 35.99m,
+                PortionQuantity = 360,
+                TotalQuantity = 5000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Paste"]
+            },
 
-            Unit = "g",
+            new()
+            {
+                Name = "Macaroane cu Brânză",
+                Price = 32.99m,
+                PortionQuantity = 400,
+                TotalQuantity = 1,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Paste"]
+            },
 
-            IsAvailable = true,
+            // Dessert
 
-            CategoryId = pizzaCategory.Id
-        },
+            new()
+            {
+                Name = "Papanași",
+                Price = 26.99m,
+                PortionQuantity = 300,
+                TotalQuantity = 4500,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Desert"]
+            },
 
-        new Dish
-        {
-            Name = "Burger Clasic",
+            new()
+            {
+                Name = "Lava Cake",
+                Price = 24.99m,
+                PortionQuantity = 250,
+                TotalQuantity = 3000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Desert"]
+            },
 
-            Price = 34.99m,
+            new()
+            {
+                Name = "Cheesecake",
+                Price = 27.99m,
+                PortionQuantity = 280,
+                TotalQuantity = 2500,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Desert"]
+            },
 
-            PortionQuantity = 400,
+            // Drinks
 
-            TotalQuantity = 6000,
+            new()
+            {
+                Name = "Limonadă",
+                Price = 14.99m,
+                PortionQuantity = 500,
+                TotalQuantity = 15000,
+                Unit = "ml",
+                IsAvailable = true,
+                CategoryId = categories["Băuturi"]
+            },
 
-            Unit = "g",
+            new()
+            {
+                Name = "Fresh Portocale",
+                Price = 18.99m,
+                PortionQuantity = 400,
+                TotalQuantity = 8000,
+                Unit = "ml",
+                IsAvailable = true,
+                CategoryId = categories["Băuturi"]
+            },
 
-            IsAvailable = true,
+            new()
+            {
+                Name = "Cappuccino",
+                Price = 12.99m,
+                PortionQuantity = 300,
+                TotalQuantity = 9000,
+                Unit = "ml",
+                IsAvailable = true,
+                CategoryId = categories["Băuturi"]
+            },
 
-            CategoryId = burgerCategory.Id
-        },
+            // Soups
 
-        new Dish
-        {
-            Name = "Burger Crispy",
+            new()
+            {
+                Name = "Supă de Legume",
+                Price = 24.99m,
+                PortionQuantity = 350,
+                TotalQuantity = 2,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Supe"]
+            },
 
-            Price = 35.99m,
+            new()
+            {
+                Name = "Ciorbă de Burtă",
+                Price = 28.99m,
+                PortionQuantity = 400,
+                TotalQuantity = 5000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Supe"]
+            },
 
-            PortionQuantity = 420,
+            // Salads
 
-            TotalQuantity = 5000,
+            new()
+            {
+                Name = "Salată Caesar",
+                Price = 31.99m,
+                PortionQuantity = 350,
+                TotalQuantity = 4000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Salate"]
+            },
 
-            Unit = "g",
+            new()
+            {
+                Name = "Salată Grecească",
+                Price = 29.99m,
+                PortionQuantity = 330,
+                TotalQuantity = 3500,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Salate"]
+            },
 
-            IsAvailable = true,
+            // Breakfast
 
-            CategoryId = burgerCategory.Id
-        },
+            new()
+            {
+                Name = "Omletă Țărănească",
+                Price = 22.99m,
+                PortionQuantity = 300,
+                TotalQuantity = 3000,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Mic Dejun"]
+            },
 
-        new Dish
-        {
-            Name = "Paste Carbonara",
-
-            Price = 36.99m,
-
-            PortionQuantity = 350,
-
-            TotalQuantity = 3,
-
-            Unit = "g",
-
-            IsAvailable = true,
-
-            CategoryId = pastaCategory.Id
-        },
-
-        new Dish
-        {
-            Name = "Papanași",
-
-            Price = 26.99m,
-
-            PortionQuantity = 300,
-
-            TotalQuantity = 4500,
-
-            Unit = "g",
-
-            IsAvailable = true,
-
-            CategoryId = dessertCategory.Id
-        },
-
-        new Dish
-        {
-            Name = "Lava Cake",
-
-            Price = 24.99m,
-
-            PortionQuantity = 250,
-
-            TotalQuantity = 3000,
-
-            Unit = "g",
-
-            IsAvailable = true,
-
-            CategoryId = dessertCategory.Id
-        },
-
-        new Dish
-        {
-            Name = "Limonadă",
-
-            Price = 14.99m,
-
-            PortionQuantity = 500,
-
-            TotalQuantity = 15000,
-
-            Unit = "ml",
-
-            IsAvailable = true,
-
-            CategoryId = drinksCategory.Id
-        },
-
-        new Dish
-        {
-            Name = "Supă de Legume",
-            Price = 24.99m,
-            PortionQuantity = 350,
-            TotalQuantity = 2,
-            Unit = "g",
-            CategoryId = 2
-        },
-
-        new Dish
-        {
-            Name = "Macaroane cu brânză",
-            Price = 49.99m,
-            PortionQuantity = 450,
-            TotalQuantity = 1,
-            Unit = "g",
-            CategoryId = 3
-        },
-
+            new()
+            {
+                Name = "English Breakfast",
+                Price = 34.99m,
+                PortionQuantity = 500,
+                TotalQuantity = 2500,
+                Unit = "g",
+                IsAvailable = true,
+                CategoryId = categories["Mic Dejun"]
+            }
         ];
 
         context.Dishes.AddRange(dishes);
@@ -337,157 +392,85 @@ public static class DbSeeder
         context.SaveChanges();
     }
 
-    // =========================================================
-    // Dishes - Allergens
-    // =========================================================
+    #endregion
+
+    #region Dish Allergens
 
     private static void SeedDishAllergens(
-    RestaurantDbContext context)
+        RestaurantDbContext context)
     {
         if (context.DishAllergens.Any())
         {
             return;
         }
 
-        Allergen gluten =
-            context.Allergens.First(
-                allergen => allergen.Name == "Gluten");
+        Dictionary<string, int> allergens =
+            context.Allergens
+                .ToDictionary(
+                    allergen => allergen.Name,
+                    allergen => allergen.Id);
 
-        Allergen lactose =
-            context.Allergens.First(
-                allergen => allergen.Name == "Lactoză");
-
-        Allergen eggs =
-            context.Allergens.First(
-                allergen => allergen.Name == "Ouă");
-
-        Dish quattro =
-            context.Dishes.First(
-                dish => dish.Name == "Pizza Quattro Formaggi");
-
-        Dish diavola =
-            context.Dishes.First(
-                dish => dish.Name == "Pizza Diavola");
-
-        Dish burgerClasic =
-            context.Dishes.First(
-                dish => dish.Name == "Burger Clasic");
-
-        Dish burgerCrispy =
-            context.Dishes.First(
-                dish => dish.Name == "Burger Crispy");
-
-        Dish carbonara =
-            context.Dishes.First(
-                dish => dish.Name == "Paste Carbonara");
-
-        Dish papanasi =
-            context.Dishes.First(
-                dish => dish.Name == "Papanași");
-
-        Dish lavaCake =
-            context.Dishes.First(
-                dish => dish.Name == "Lava Cake");
+        Dictionary<string, int> dishes =
+            context.Dishes
+                .ToDictionary(
+                    dish => dish.Name,
+                    dish => dish.Id);
 
         List<DishAllergen> dishAllergens =
         [
-            // Pizza Quattro Formaggi
+            new()
+            {
+                DishId = dishes["Pizza Quattro Formaggi"],
+                AllergenId = allergens["Gluten"]
+            },
 
-            new DishAllergen
-        {
-            DishId = quattro.Id,
-            AllergenId = gluten.Id
-        },
+            new()
+            {
+                DishId = dishes["Pizza Quattro Formaggi"],
+                AllergenId = allergens["Lactoză"]
+            },
 
-        new DishAllergen
-        {
-            DishId = quattro.Id,
-            AllergenId = lactose.Id
-        },
+            new()
+            {
+                DishId = dishes["Paste Carbonara"],
+                AllergenId = allergens["Ouă"]
+            },
 
-        // Pizza Diavola
+            new()
+            {
+                DishId = dishes["Paste Carbonara"],
+                AllergenId = allergens["Gluten"]
+            },
 
-        new DishAllergen
-        {
-            DishId = diavola.Id,
-            AllergenId = gluten.Id
-        },
+            new()
+            {
+                DishId = dishes["Cheesecake"],
+                AllergenId = allergens["Lactoză"]
+            },
 
-        // Burger Clasic
+            new()
+            {
+                DishId = dishes["Cheesecake"],
+                AllergenId = allergens["Ouă"]
+            },
 
-        new DishAllergen
-        {
-            DishId = burgerClasic.Id,
-            AllergenId = gluten.Id
-        },
+            new()
+            {
+                DishId = dishes["Salată Caesar"],
+                AllergenId = allergens["Ouă"]
+            },
 
-        new DishAllergen
-        {
-            DishId = burgerClasic.Id,
-            AllergenId = lactose.Id
-        },
+            new()
+            {
+                DishId = dishes["Ciorbă de Burtă"],
+                AllergenId = allergens["Țelină"]
+            },
 
-        // Burger Crispy
-
-        new DishAllergen
-        {
-            DishId = burgerCrispy.Id,
-            AllergenId = gluten.Id
-        },
-
-        // Carbonara
-
-        new DishAllergen
-        {
-            DishId = carbonara.Id,
-            AllergenId = gluten.Id
-        },
-
-        new DishAllergen
-        {
-            DishId = carbonara.Id,
-            AllergenId = lactose.Id
-        },
-
-        new DishAllergen
-        {
-            DishId = carbonara.Id,
-            AllergenId = eggs.Id
-        },
-
-        // Papanași
-
-        new DishAllergen
-        {
-            DishId = papanasi.Id,
-            AllergenId = gluten.Id
-        },
-
-        new DishAllergen
-        {
-            DishId = papanasi.Id,
-            AllergenId = lactose.Id
-        },
-
-        new DishAllergen
-        {
-            DishId = papanasi.Id,
-            AllergenId = eggs.Id
-        },
-
-        // Lava Cake
-
-        new DishAllergen
-        {
-            DishId = lavaCake.Id,
-            AllergenId = gluten.Id
-        },
-
-        new DishAllergen
-        {
-            DishId = lavaCake.Id,
-            AllergenId = eggs.Id
-        }
+            new()
+            {
+                DishId = dishes["Macaroane cu Brânză"],
+                AllergenId = allergens["Lactoză"]
+            }
         ];
 
         context.DishAllergens.AddRange(
@@ -495,4 +478,146 @@ public static class DbSeeder
 
         context.SaveChanges();
     }
+
+    #endregion
+
+    #region Menus
+
+    private static void SeedMenus(
+        RestaurantDbContext context)
+    {
+        if (context.Menus.Any())
+        {
+            return;
+        }
+
+        Dictionary<string, int> categories =
+            context.Categories
+                .ToDictionary(
+                    category => category.Name,
+                    category => category.Id);
+
+        List<Menu> menus =
+        [
+            new()
+        {
+            Name = "Italian Combo",
+            DiscountPercent = 10,
+            ImagePath = string.Empty,
+            IsAvailable = true,
+            CategoryId = categories["Pizza"]
+        },
+
+        new()
+        {
+            Name = "Burger Combo",
+            DiscountPercent = 15,
+            ImagePath = string.Empty,
+            IsAvailable = true,
+            CategoryId = categories["Burgeri"]
+        },
+
+        new()
+        {
+            Name = "Breakfast Combo",
+            DiscountPercent = 12,
+            ImagePath = string.Empty,
+            IsAvailable = true,
+            CategoryId = categories["Mic Dejun"]
+        }
+        ];
+
+        context.Menus.AddRange(menus);
+
+        context.SaveChanges();
+    }
+
+    #endregion
+
+    #region Menu Dishes
+
+    private static void SeedMenuDishes(
+        RestaurantDbContext context)
+    {
+        if (context.MenuDishes.Any())
+        {
+            return;
+        }
+
+        Dictionary<string, int> menus =
+            context.Menus
+                .ToDictionary(
+                    menu => menu.Name,
+                    menu => menu.Id);
+
+        Dictionary<string, int> dishes =
+            context.Dishes
+                .ToDictionary(
+                    dish => dish.Name,
+                    dish => dish.Id);
+
+        List<MenuDish> menuDishes =
+        [
+            // Italian Combo
+
+            new()
+        {
+            MenuId = menus["Italian Combo"],
+            DishId = dishes["Pizza Quattro Formaggi"],
+            Quantity = 1
+        },
+
+        new()
+        {
+            MenuId = menus["Italian Combo"],
+            DishId = dishes["Paste Carbonara"],
+            Quantity = 1
+        },
+
+        new()
+        {
+            MenuId = menus["Italian Combo"],
+            DishId = dishes["Limonadă"],
+            Quantity = 1
+        },
+
+        // Burger Combo
+
+        new()
+        {
+            MenuId = menus["Burger Combo"],
+            DishId = dishes["Burger Clasic"],
+            Quantity = 1
+        },
+
+        new()
+        {
+            MenuId = menus["Burger Combo"],
+            DishId = dishes["Fresh Portocale"],
+            Quantity = 1
+        },
+
+        // Breakfast Combo
+
+        new()
+        {
+            MenuId = menus["Breakfast Combo"],
+            DishId = dishes["Omletă Țărănească"],
+            Quantity = 1
+        },
+
+        new()
+        {
+            MenuId = menus["Breakfast Combo"],
+            DishId = dishes["Cappuccino"],
+            Quantity = 1
+        }
+        ];
+
+        context.MenuDishes.AddRange(menuDishes);
+
+        context.SaveChanges();
+    }
+
+    #endregion
 }

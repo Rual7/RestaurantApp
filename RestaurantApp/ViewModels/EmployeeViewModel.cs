@@ -1,6 +1,4 @@
-﻿// EmployeeViewModel.cs
-
-using BusinessLogicLayer.Services;
+﻿using BusinessLogicLayer.Services;
 using Models;
 using Models.Enums;
 using System.Collections.ObjectModel;
@@ -20,9 +18,14 @@ public class EmployeeViewModel
     private readonly MenuService _menuService =
         new();
 
-    // =====================================================
-    // Constructor
-    // =====================================================
+    private string _newCategoryName =
+        string.Empty;
+
+    private string _newAllergenName =
+        string.Empty;
+
+    private EmployeeSection _currentSection =
+        EmployeeSection.Categories;
 
     public EmployeeViewModel()
     {
@@ -37,7 +40,8 @@ public class EmployeeViewModel
         LowStockDishes =
             new ObservableCollection<Dish>(
                 _menuService.GetMenu()
-                    .Where(dish => dish.TotalQuantity <= 5));
+                    .Where(
+                        dish => dish.TotalQuantity <= 5));
 
         AddCategoryCommand =
             new RelayCommand(
@@ -45,7 +49,9 @@ public class EmployeeViewModel
 
         DeleteCategoryCommand =
             new RelayCommand(
-                category => DeleteCategory((Category)category!));
+                category =>
+                    DeleteCategory(
+                        (Category)category!));
 
         AddAllergenCommand =
             new RelayCommand(
@@ -53,7 +59,9 @@ public class EmployeeViewModel
 
         DeleteAllergenCommand =
             new RelayCommand(
-                allergen => DeleteAllergen((Allergen)allergen!));
+                allergen =>
+                    DeleteAllergen(
+                        (Allergen)allergen!));
 
         ShowCategoriesCommand =
             new RelayCommand(
@@ -71,9 +79,7 @@ public class EmployeeViewModel
                     EmployeeSection.LowStock);
     }
 
-    // =====================================================
-    // Collections
-    // =====================================================
+    #region Collections
 
     public ObservableCollection<Category> Categories
     {
@@ -90,12 +96,9 @@ public class EmployeeViewModel
         get;
     }
 
-    // =====================================================
-    // Inputs
-    // =====================================================
+    #endregion
 
-    private string _newCategoryName =
-        string.Empty;
+    #region Inputs
 
     public string NewCategoryName
     {
@@ -109,9 +112,6 @@ public class EmployeeViewModel
         }
     }
 
-    private string _newAllergenName =
-        string.Empty;
-
     public string NewAllergenName
     {
         get => _newAllergenName;
@@ -124,12 +124,9 @@ public class EmployeeViewModel
         }
     }
 
-    // =====================================================
-    // Sections
-    // =====================================================
+    #endregion
 
-    private EmployeeSection _currentSection =
-        EmployeeSection.Categories;
+    #region Sections
 
     public EmployeeSection CurrentSection
     {
@@ -141,11 +138,14 @@ public class EmployeeViewModel
 
             OnPropertyChanged();
 
-            OnPropertyChanged(nameof(IsCategoriesVisible));
+            OnPropertyChanged(
+                nameof(IsCategoriesVisible));
 
-            OnPropertyChanged(nameof(IsAllergensVisible));
+            OnPropertyChanged(
+                nameof(IsAllergensVisible));
 
-            OnPropertyChanged(nameof(IsLowStockVisible));
+            OnPropertyChanged(
+                nameof(IsLowStockVisible));
         }
     }
 
@@ -161,9 +161,9 @@ public class EmployeeViewModel
         CurrentSection ==
         EmployeeSection.LowStock;
 
-    // =====================================================
-    // Commands
-    // =====================================================
+    #endregion
+
+    #region Commands
 
     public ICommand AddCategoryCommand
     {
@@ -200,9 +200,9 @@ public class EmployeeViewModel
         get;
     }
 
-    // =====================================================
-    // Categories
-    // =====================================================
+    #endregion
+
+    #region Categories
 
     private void AddCategory()
     {
@@ -215,8 +215,7 @@ public class EmployeeViewModel
         Category category =
             new()
             {
-                Name =
-                    NewCategoryName
+                Name = NewCategoryName
             };
 
         _categoryService.Add(category);
@@ -236,9 +235,9 @@ public class EmployeeViewModel
         Categories.Remove(category);
     }
 
-    // =====================================================
-    // Allergens
-    // =====================================================
+    #endregion
+
+    #region Allergens
 
     private void AddAllergen()
     {
@@ -251,8 +250,7 @@ public class EmployeeViewModel
         Allergen allergen =
             new()
             {
-                Name =
-                    NewAllergenName
+                Name = NewAllergenName
             };
 
         _allergenService.Add(allergen);
@@ -271,4 +269,6 @@ public class EmployeeViewModel
 
         Allergens.Remove(allergen);
     }
+
+    #endregion
 }

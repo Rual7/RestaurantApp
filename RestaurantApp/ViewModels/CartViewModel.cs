@@ -3,31 +3,23 @@ using BusinessLogicLayer.Services;
 using Models;
 using RestaurantApp.Views.Shared;
 using System.Collections.ObjectModel;
-using System.Windows;
 using System.Windows.Input;
 
 namespace ViewModels;
 
-public class CartViewModel : BaseViewModel
+public class CartViewModel
+    : BaseViewModel
 {
-    private readonly CartService _cartService;
+    private readonly CartService _cartService =
+        CartService.Instance;
 
-    private readonly OrderService _orderService;
+    private readonly OrderService _orderService =
+        new();
 
     public CartViewModel()
     {
-        _cartService =
-            CartService.Instance;
-
-        _orderService =
-            new OrderService();
-
         _cartService.CartChanged +=
             Refresh;
-
-        // =====================================================
-        // Commands
-        // =====================================================
 
         IncreaseQuantityCommand =
             new RelayCommand(
@@ -52,9 +44,7 @@ public class CartViewModel : BaseViewModel
         Refresh();
     }
 
-    // =====================================================
-    // Properties
-    // =====================================================
+    #region Properties
 
     public ObservableCollection<CartItem> Items =>
         _cartService.Items;
@@ -65,9 +55,9 @@ public class CartViewModel : BaseViewModel
     public bool IsEmpty =>
         !Items.Any();
 
-    // =====================================================
-    // Commands
-    // =====================================================
+    #endregion
+
+    #region Commands
 
     public ICommand IncreaseQuantityCommand
     {
@@ -94,9 +84,9 @@ public class CartViewModel : BaseViewModel
         get;
     }
 
-    // =====================================================
-    // Quantity
-    // =====================================================
+    #endregion
+
+    #region Quantity
 
     private void IncreaseQuantity(
         object? parameter)
@@ -122,9 +112,9 @@ public class CartViewModel : BaseViewModel
             item);
     }
 
-    // =====================================================
-    // Remove
-    // =====================================================
+    #endregion
+
+    #region Remove
 
     private void RemoveItem(
         object? parameter)
@@ -138,28 +128,21 @@ public class CartViewModel : BaseViewModel
             item);
     }
 
-    // =====================================================
-    // Clear
-    // =====================================================
+    #endregion
+
+    #region Clear
 
     private void ClearCart()
     {
         _cartService.ClearCart();
     }
 
-    // =====================================================
-    // Place Order
-    // =====================================================
+    #endregion
 
-    // CartViewModel.cs
-    // ÎNLOCUIEȘTE doar metoda PlaceOrder()
+    #region Place Order
 
     private void PlaceOrder()
     {
-        // =====================================================
-        // Empty Cart
-        // =====================================================
-
         if (IsEmpty)
         {
             CustomMessageBox.Show(
@@ -168,10 +151,6 @@ public class CartViewModel : BaseViewModel
 
             return;
         }
-
-        // =====================================================
-        // Authentication
-        // =====================================================
 
         if (!SessionManager.IsAuthenticated)
         {
@@ -184,23 +163,11 @@ public class CartViewModel : BaseViewModel
 
         try
         {
-            // =================================================
-            // Place Order
-            // =================================================
-
             _orderService.PlaceOrder(
                 SessionManager.CurrentUser!.Id,
                 Items);
 
-            // =================================================
-            // Clear Cart
-            // =================================================
-
             _cartService.ClearCart();
-
-            // =================================================
-            // Success
-            // =================================================
 
             CustomMessageBox.Show(
                 "Order",
@@ -214,14 +181,21 @@ public class CartViewModel : BaseViewModel
         }
     }
 
-    // =====================================================
-    // Refresh
-    // =====================================================
+    #endregion
+
+    #region Refresh
 
     private void Refresh()
     {
-        OnPropertyChanged(nameof(Items));
-        OnPropertyChanged(nameof(Total));
-        OnPropertyChanged(nameof(IsEmpty));
+        OnPropertyChanged(
+            nameof(Items));
+
+        OnPropertyChanged(
+            nameof(Total));
+
+        OnPropertyChanged(
+            nameof(IsEmpty));
     }
+
+    #endregion
 }

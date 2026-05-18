@@ -1,6 +1,4 @@
-﻿// EmployeeOrdersView.xaml.cs
-
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 using ViewModels;
 
 namespace RestaurantApp.Views.Employee;

@@ -5,16 +5,20 @@ namespace BusinessLogicLayer.Helpers;
 
 public static class PasswordHelper
 {
-    public static string HashPassword(string password)
+    public static string HashPassword(
+        string password)
     {
-        byte[] bytes = SHA256.HashData(
-            Encoding.UTF8.GetBytes(password));
+        byte[] bytes =
+            SHA256.HashData(
+                Encoding.UTF8.GetBytes(password));
 
-        StringBuilder builder = new();
+        StringBuilder builder =
+            new();
 
-        foreach (byte b in bytes)
+        foreach (byte value in bytes)
         {
-            builder.Append(b.ToString("x2"));
+            builder.Append(
+                value.ToString("x2"));
         }
 
         return builder.ToString();

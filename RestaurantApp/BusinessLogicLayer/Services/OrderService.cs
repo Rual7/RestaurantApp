@@ -1,8 +1,6 @@
-﻿// OrderService.cs
-
-using BusinessLogicLayer.Helpers;
-using DataAccessLayer.Context;
+﻿using DataAccessLayer.Context;
 using DataAccessLayer.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Enums;
 using System.Configuration;
@@ -11,17 +9,15 @@ namespace BusinessLogicLayer.Services;
 
 public class OrderService
 {
-    private readonly OrderRepository _orderRepository;
+    #region Fields
 
-    public OrderService()
-    {
+    private readonly OrderRepository
         _orderRepository =
-            new OrderRepository();
-    }
+            new();
 
-    // =====================================================
-    // Place Order
-    // =====================================================
+    #endregion
+
+    #region Place Order
 
     public void PlaceOrder(
         int userId,
@@ -35,10 +31,6 @@ public class OrderService
 
         try
         {
-            // =================================================
-            // Costs
-            // =================================================
-
             decimal foodCost =
                 cartItems.Sum(
                     item => item.TotalPrice);
@@ -63,18 +55,10 @@ public class OrderService
                     ConfigurationManager.AppSettings[
                         "OrderDiscountPercent"]!);
 
-            // =================================================
-            // Delivery
-            // =================================================
-
             decimal deliveryFee =
                 foodCost >= minimumFreeDelivery
                     ? 0
                     : deliveryFeeValue;
-
-            // =================================================
-            // Discount
-            // =================================================
 
             decimal discountAmount =
                 foodCost >= minimumOrderForDiscount
@@ -82,31 +66,22 @@ public class OrderService
                       (orderDiscountPercent / 100)
                     : 0;
 
-            // =================================================
-            // Total
-            // =================================================
-
             decimal totalCost =
                 foodCost +
                 deliveryFee -
                 discountAmount;
 
-            // =================================================
-            // Romania Time
-            // =================================================
-
             DateTime romaniaTime =
                 DateTime.UtcNow.AddHours(3);
-
-            // =================================================
-            // Create Order
-            // =================================================
 
             Order order =
                 new()
                 {
                     OrderCode =
-                        GenerateOrderCode(),
+                        $"ORD-{Guid.NewGuid()
+                            .ToString()
+                            .Substring(0, 8)
+                            .ToUpper()}",
 
                     CreatedAt =
                         romaniaTime,
@@ -137,61 +112,127 @@ public class OrderService
 
             context.SaveChanges();
 
-            // =================================================
-            // Items
-            // =================================================
-
             foreach (CartItem cartItem in cartItems)
             {
-                Dish dish =
-                    context.Dishes.First(
-                        dish =>
-                            dish.Id ==
-                            cartItem.Dish.Id);
-
-                // stock validation
-
-                double requiredQuantity =
-                    dish.PortionQuantity *
-                    cartItem.Quantity;
-
-                if (dish.TotalQuantity <
-                    requiredQuantity)
+                if (cartItem.Dish != null)
                 {
-                    throw new Exception(
-                        $"{dish.Name} is unavailable.");
-                }
+                    Dish dish =
+                        context.Dishes.First(
+                            dish =>
+                                dish.Id ==
+                                cartItem.Dish.Id);
 
-                // create order item
+                    double requiredQuantity =
+                        dish.PortionQuantity *
+                        cartItem.Quantity;
 
-                OrderItem orderItem =
-                    new()
+                    if (dish.TotalQuantity <
+                        requiredQuantity)
                     {
-                        OrderId =
-                            order.Id,
+                        throw new Exception(
+                            $"{dish.Name} is unavailable.");
+                    }
 
-                        DishId =
-                            dish.Id,
+                    OrderItem orderItem =
+                        new()
+                        {
+                            OrderId =
+                                order.Id,
 
-                        Quantity =
-                            cartItem.Quantity,
+                            DishId =
+                                dish.Id,
 
-                        Price =
-                            Math.Round(dish.Price, 2)
-                    };
+                            Quantity =
+                                cartItem.Quantity,
 
-                context.OrderItems.Add(
-                    orderItem);
+                            Price =
+                                Math.Round(dish.Price, 2)
+                        };
 
-                // update stock
+                    context.OrderItems.Add(
+                        orderItem);
 
-                dish.TotalQuantity -=
-                    requiredQuantity;
+                    dish.TotalQuantity -=
+                        requiredQuantity;
 
-                if (dish.TotalQuantity <
-                    dish.PortionQuantity)
+                    if (dish.TotalQuantity <
+                        dish.PortionQuantity)
+                    {
+                        dish.IsAvailable = false;
+                    }
+                }
+                else if (cartItem.Menu != null)
                 {
-                    dish.IsAvailable = false;
+                    Menu menu =
+                        context.Menus
+                            .Where(
+                                menu =>
+                                    menu.Id ==
+                                    cartItem.Menu!.Id)
+                            .Include(menu => menu.MenuDishes)
+                                .ThenInclude(menuDish => menuDish.Dish)
+                            .First();
+
+                    decimal total =
+                        menu.MenuDishes.Sum(
+                            menuDish =>
+                                menuDish.Dish.Price);
+
+                    decimal discountedPrice =
+                        total -
+                        (total *
+                         menu.DiscountPercent / 100);
+
+                    OrderItem orderItem =
+                        new()
+                        {
+                            OrderId =
+                                order.Id,
+
+                            MenuId =
+                                menu.Id,
+
+                            Quantity =
+                                cartItem.Quantity,
+
+                            Price =
+                                Math.Round(
+                                    discountedPrice,
+                                    2)
+                        };
+
+                    context.OrderItems.Add(
+                        orderItem);
+
+                    foreach (MenuDish menuDish
+                             in menu.MenuDishes)
+                    {
+                        Dish dish =
+                            context.Dishes.First(
+                                dish =>
+                                    dish.Id ==
+                                    menuDish.DishId);
+
+                        double requiredQuantity =
+                            dish.PortionQuantity *
+                            cartItem.Quantity;
+
+                        if (dish.TotalQuantity <
+                            requiredQuantity)
+                        {
+                            throw new Exception(
+                                $"{dish.Name} is unavailable.");
+                        }
+
+                        dish.TotalQuantity -=
+                            requiredQuantity;
+
+                        if (dish.TotalQuantity <
+                            dish.PortionQuantity)
+                        {
+                            dish.IsAvailable = false;
+                        }
+                    }
                 }
             }
 
@@ -207,58 +248,23 @@ public class OrderService
         }
     }
 
-    // =====================================================
-    // Get Orders
-    // =====================================================
+    #endregion
+
+    #region Orders
 
     public List<Order> GetUserOrders(
         int userId)
     {
-        return _orderRepository.GetOrdersByUser(
-            userId);
+        return _orderRepository
+            .GetOrdersByUser(userId);
     }
-
-    // =====================================================
-    // Get Active Orders
-    // =====================================================
 
     public List<Order> GetActiveOrders(
         int userId)
     {
-        return _orderRepository.GetActiveOrdersByUser(
-            userId);
+        return _orderRepository
+            .GetActiveOrdersByUser(userId);
     }
-
-    // =====================================================
-    // Cancel Order
-    // =====================================================
-
-    public bool CancelOrder(
-        int orderId,
-        int userId)
-    {
-        return _orderRepository.CancelOrder(
-            orderId,
-            userId);
-    }
-
-    // =====================================================
-    // Helpers
-    // =====================================================
-
-    private string GenerateOrderCode()
-    {
-        return
-            $"ORD-{Guid.NewGuid()
-                .ToString()
-                .Substring(0, 8)
-                .ToUpper()}";
-    }
-
-
-    // =====================================================
-    // Employee Orders
-    // =====================================================
 
     public List<Order> GetAllOrders()
     {
@@ -272,16 +278,29 @@ public class OrderService
             .GetAllActiveOrders();
     }
 
-    // =====================================================
-    // Update Status
-    // =====================================================
+    #endregion
+
+    #region Status
+
+    public bool CancelOrder(
+        int orderId,
+        int userId)
+    {
+        return _orderRepository
+            .CancelOrder(
+                orderId,
+                userId);
+    }
 
     public void UpdateStatus(
         int orderId,
         OrderStatus status)
     {
-        _orderRepository.UpdateStatus(
-            orderId,
-            status);
+        _orderRepository
+            .UpdateStatus(
+                orderId,
+                status);
     }
+
+    #endregion
 }

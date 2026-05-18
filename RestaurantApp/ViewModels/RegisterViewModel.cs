@@ -5,214 +5,284 @@ using System.Windows.Input;
 
 namespace ViewModels;
 
-public class RegisterViewModel : BaseViewModel
+public class RegisterViewModel
+    : BaseViewModel
 {
-    private readonly AuthService _authService;
+    private readonly AuthService _authService =
+        new();
+
+    private string _firstName =
+        string.Empty;
+
+    private string _lastName =
+        string.Empty;
+
+    private string _email =
+        string.Empty;
+
+    private string _phoneNumber =
+        string.Empty;
+
+    private string _address =
+        string.Empty;
+
+    private string _password =
+        string.Empty;
+
+    private string _confirmPassword =
+        string.Empty;
+
+    private string _firstNameError =
+        string.Empty;
+
+    private string _lastNameError =
+        string.Empty;
+
+    private string _emailError =
+        string.Empty;
+
+    private string _phoneNumberError =
+        string.Empty;
+
+    private string _addressError =
+        string.Empty;
+
+    private string _passwordError =
+        string.Empty;
+
+    private string _confirmPasswordError =
+        string.Empty;
 
     public RegisterViewModel()
     {
-        _authService = new AuthService();
-
-        RegisterCommand = new RelayCommand(_ => Register());
+        RegisterCommand =
+            new RelayCommand(
+                _ => Register());
     }
 
-    // =========================
-    // Properties
-    // =========================
-
-    private string _firstName = string.Empty;
+    #region Properties
 
     public string FirstName
     {
         get => _firstName;
+
         set
         {
-            if (SetProperty(ref _firstName, value))
+            if (SetProperty(
+                    ref _firstName,
+                    value))
             {
-                FirstNameError = string.Empty;
+                FirstNameError =
+                    string.Empty;
             }
         }
     }
-
-    private string _lastName = string.Empty;
 
     public string LastName
     {
         get => _lastName;
+
         set
         {
-            if (SetProperty(ref _lastName, value))
+            if (SetProperty(
+                    ref _lastName,
+                    value))
             {
-                LastNameError = string.Empty;
+                LastNameError =
+                    string.Empty;
             }
         }
     }
-
-    private string _email = string.Empty;
 
     public string Email
     {
         get => _email;
+
         set
         {
-            if (SetProperty(ref _email, value))
+            if (SetProperty(
+                    ref _email,
+                    value))
             {
-                EmailError = string.Empty;
+                EmailError =
+                    string.Empty;
             }
         }
     }
-
-    private string _phoneNumber = string.Empty;
 
     public string PhoneNumber
     {
         get => _phoneNumber;
+
         set
         {
-            if (SetProperty(ref _phoneNumber, value))
+            if (SetProperty(
+                    ref _phoneNumber,
+                    value))
             {
-                PhoneNumberError = string.Empty;
+                PhoneNumberError =
+                    string.Empty;
             }
         }
     }
-
-    private string _address = string.Empty;
 
     public string Address
     {
         get => _address;
+
         set
         {
-            if (SetProperty(ref _address, value))
+            if (SetProperty(
+                    ref _address,
+                    value))
             {
-                AddressError = string.Empty;
+                AddressError =
+                    string.Empty;
             }
         }
     }
-
-    private string _password = string.Empty;
 
     public string Password
     {
         get => _password;
+
         set
         {
-            if (SetProperty(ref _password, value))
+            if (SetProperty(
+                    ref _password,
+                    value))
             {
-                PasswordError = string.Empty;
+                PasswordError =
+                    string.Empty;
             }
         }
     }
-
-    private string _confirmPassword = string.Empty;
 
     public string ConfirmPassword
     {
         get => _confirmPassword;
+
         set
         {
-            if (SetProperty(ref _confirmPassword, value))
+            if (SetProperty(
+                    ref _confirmPassword,
+                    value))
             {
-                ConfirmPasswordError = string.Empty;
+                ConfirmPasswordError =
+                    string.Empty;
             }
         }
     }
 
-    // =========================
-    // Error Properties
-    // =========================
+    #endregion
 
-    private string _firstNameError = string.Empty;
+    #region Errors
 
     public string FirstNameError
     {
         get => _firstNameError;
-        set => SetProperty(ref _firstNameError, value);
-    }
 
-    private string _lastNameError = string.Empty;
+        set => SetProperty(
+            ref _firstNameError,
+            value);
+    }
 
     public string LastNameError
     {
         get => _lastNameError;
-        set => SetProperty(ref _lastNameError, value);
-    }
 
-    private string _emailError = string.Empty;
+        set => SetProperty(
+            ref _lastNameError,
+            value);
+    }
 
     public string EmailError
     {
         get => _emailError;
-        set => SetProperty(ref _emailError, value);
-    }
 
-    private string _phoneNumberError = string.Empty;
+        set => SetProperty(
+            ref _emailError,
+            value);
+    }
 
     public string PhoneNumberError
     {
         get => _phoneNumberError;
-        set => SetProperty(ref _phoneNumberError, value);
-    }
 
-    private string _addressError = string.Empty;
+        set => SetProperty(
+            ref _phoneNumberError,
+            value);
+    }
 
     public string AddressError
     {
         get => _addressError;
-        set => SetProperty(ref _addressError, value);
-    }
 
-    private string _passwordError = string.Empty;
+        set => SetProperty(
+            ref _addressError,
+            value);
+    }
 
     public string PasswordError
     {
         get => _passwordError;
-        set => SetProperty(ref _passwordError, value);
-    }
 
-    private string _confirmPasswordError = string.Empty;
+        set => SetProperty(
+            ref _passwordError,
+            value);
+    }
 
     public string ConfirmPasswordError
     {
         get => _confirmPasswordError;
-        set => SetProperty(ref _confirmPasswordError, value);
+
+        set => SetProperty(
+            ref _confirmPasswordError,
+            value);
     }
 
-    // =========================
-    // Commands
-    // =========================
+    #endregion
 
-    public ICommand RegisterCommand { get; }
+    #region Commands
 
-    // =========================
-    // Methods
-    // =========================
+    public ICommand RegisterCommand
+    {
+        get;
+    }
+
+    #endregion
+
+    #region Register
 
     private void Register()
     {
-        bool isValid = true;
+        bool isValid =
+            true;
 
-        // First Name
-
-        if (string.IsNullOrWhiteSpace(FirstName))
+        if (string.IsNullOrWhiteSpace(
+                FirstName))
         {
-            FirstNameError = "First name is required.";
+            FirstNameError =
+                "First name is required.";
+
             isValid = false;
         }
 
-        // Last Name
-
-        if (string.IsNullOrWhiteSpace(LastName))
+        if (string.IsNullOrWhiteSpace(
+                LastName))
         {
-            LastNameError = "Last name is required.";
+            LastNameError =
+                "Last name is required.";
+
             isValid = false;
         }
 
-        // Email
-
-        if (string.IsNullOrWhiteSpace(Email))
+        if (string.IsNullOrWhiteSpace(
+                Email))
         {
-            EmailError = "Email is required.";
+            EmailError =
+                "Email is required.";
+
             isValid = false;
         }
         else if (!Regex.IsMatch(
@@ -225,9 +295,8 @@ public class RegisterViewModel : BaseViewModel
             isValid = false;
         }
 
-        // Phone Number
-
-        if (string.IsNullOrWhiteSpace(PhoneNumber))
+        if (string.IsNullOrWhiteSpace(
+                PhoneNumber))
         {
             PhoneNumberError =
                 "Phone number is required.";
@@ -244,19 +313,21 @@ public class RegisterViewModel : BaseViewModel
             isValid = false;
         }
 
-        // Address
-
-        if (string.IsNullOrWhiteSpace(Address))
+        if (string.IsNullOrWhiteSpace(
+                Address))
         {
-            AddressError = "Address is required.";
+            AddressError =
+                "Address is required.";
+
             isValid = false;
         }
 
-        // Password
-
-        if (string.IsNullOrWhiteSpace(Password))
+        if (string.IsNullOrWhiteSpace(
+                Password))
         {
-            PasswordError = "Password is required.";
+            PasswordError =
+                "Password is required.";
+
             isValid = false;
         }
         else if (Password.Length < 6)
@@ -267,16 +338,16 @@ public class RegisterViewModel : BaseViewModel
             isValid = false;
         }
 
-        // Confirm Password
-
-        if (string.IsNullOrWhiteSpace(ConfirmPassword))
+        if (string.IsNullOrWhiteSpace(
+                ConfirmPassword))
         {
             ConfirmPasswordError =
                 "Please confirm your password.";
 
             isValid = false;
         }
-        else if (Password != ConfirmPassword)
+        else if (Password !=
+                 ConfirmPassword)
         {
             ConfirmPasswordError =
                 "Passwords do not match.";
@@ -289,13 +360,14 @@ public class RegisterViewModel : BaseViewModel
             return;
         }
 
-        bool success = _authService.Register(
-            FirstName,
-            LastName,
-            Email,
-            PhoneNumber,
-            Address,
-            Password);
+        bool success =
+            _authService.Register(
+                FirstName,
+                LastName,
+                Email,
+                PhoneNumber,
+                Address,
+                Password);
 
         if (success)
         {
@@ -305,7 +377,10 @@ public class RegisterViewModel : BaseViewModel
         }
         else
         {
-            EmailError = "Email already exists.";
+            EmailError =
+                "Email already exists.";
         }
     }
+
+    #endregion
 }

@@ -7,8 +7,6 @@
 
     <UserControl.Resources>
 
-        <!-- TextBox Style -->
-
         <Style x:Key="ModernTextBoxStyle"
                TargetType="TextBox">
 
@@ -83,8 +81,6 @@
 
         </Style>
 
-        <!-- ComboBox Style -->
-
         <Style x:Key="ModernComboBoxStyle"
                TargetType="ComboBox">
 
@@ -126,8 +122,6 @@
 
                         <Grid>
 
-                            <!-- Main Border -->
-
                             <Border x:Name="Border"
                                     Background="{TemplateBinding Background}"
                                     BorderBrush="{TemplateBinding BorderBrush}"
@@ -144,14 +138,10 @@
 
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- Selected Item -->
-
                                     <ContentPresenter Margin="12,0,0,0"
                                                       VerticalAlignment="Center"
                                                       HorizontalAlignment="Left"
                                                       Content="{TemplateBinding SelectionBoxItem}"/>
-
-                                    <!-- Arrow -->
 
                                     <TextBlock Grid.Column="1"
                                                Text="▼"
@@ -164,8 +154,6 @@
 
                             </Border>
 
-                            <!-- Invisible Toggle -->
-
                             <ToggleButton Background="Transparent"
                                           BorderThickness="0"
                                           Focusable="False"
@@ -174,8 +162,6 @@
                                           IsChecked="{Binding IsDropDownOpen,
                                                               RelativeSource={RelativeSource TemplatedParent},
                                                               Mode=TwoWay}"/>
-
-                            <!-- Dropdown -->
 
                             <Popup Name="Popup"
                                    Placement="Bottom"
@@ -206,8 +192,6 @@
 
                         <ControlTemplate.Triggers>
 
-                            <!-- Hover -->
-
                             <Trigger Property="IsMouseOver"
                                      Value="True">
 
@@ -216,8 +200,6 @@
                                         Value="#5F5F5F"/>
 
                             </Trigger>
-
-                            <!-- Focus -->
 
                             <Trigger Property="IsKeyboardFocusWithin"
                                      Value="True">
@@ -241,8 +223,6 @@
             </Setter>
 
         </Style>
-
-        <!-- ComboBoxItem Style -->
 
         <Style TargetType="ComboBoxItem">
 
@@ -272,8 +252,6 @@
 
                         <ControlTemplate.Triggers>
 
-                            <!-- Hover -->
-
                             <Trigger Property="IsHighlighted"
                                      Value="True">
 
@@ -282,8 +260,6 @@
                                         Value="#EFEFEF"/>
 
                             </Trigger>
-
-                            <!-- Selected -->
 
                             <Trigger Property="IsSelected"
                                      Value="True">
@@ -303,134 +279,6 @@
             </Setter>
 
         </Style>
-
-        <!-- CheckBox Style -->
-
-        <Style x:Key="ModernCheckBoxStyle"
-               TargetType="CheckBox">
-
-            <Setter Property="FontSize"
-                    Value="14"/>
-
-            <Setter Property="Foreground"
-                    Value="#333333"/>
-
-            <Setter Property="Cursor"
-                    Value="Hand"/>
-
-            <Setter Property="Template">
-
-                <Setter.Value>
-
-                    <ControlTemplate TargetType="CheckBox">
-
-                        <StackPanel Orientation="Horizontal">
-
-                            <!-- Box -->
-
-                            <Border x:Name="Border"
-                                    Width="18"
-                                    Height="18"
-                                    CornerRadius="4"
-                                    BorderBrush="#BBBBBB"
-                                    BorderThickness="1"
-                                    Background="White"
-                                    VerticalAlignment="Center">
-
-                                <TextBlock x:Name="CheckIcon"
-                                           Text="✓"
-                                           FontSize="12"
-                                           Foreground="White"
-                                           HorizontalAlignment="Center"
-                                           VerticalAlignment="Center"
-                                           Visibility="Collapsed"/>
-
-                            </Border>
-
-                            <!-- Text -->
-
-                            <ContentPresenter Margin="10,0,0,0"
-                                              VerticalAlignment="Center"/>
-
-                        </StackPanel>
-
-                        <ControlTemplate.Triggers>
-
-                            <!-- Hover -->
-
-                            <Trigger Property="IsMouseOver"
-                                     Value="True">
-
-                                <Setter TargetName="Border"
-                                        Property="BorderBrush"
-                                        Value="#5F5F5F"/>
-
-                            </Trigger>
-
-                            <!-- Checked -->
-
-                            <Trigger Property="IsChecked"
-                                     Value="True">
-
-                                <Setter TargetName="Border"
-                                        Property="Background"
-                                        Value="#5F5F5F"/>
-
-                                <Setter TargetName="Border"
-                                        Property="BorderBrush"
-                                        Value="#5F5F5F"/>
-
-                                <Setter TargetName="CheckIcon"
-                                        Property="Visibility"
-                                        Value="Visible"/>
-
-                            </Trigger>
-
-                        </ControlTemplate.Triggers>
-
-                    </ControlTemplate>
-
-                </Setter.Value>
-
-            </Setter>
-
-        </Style>
-
-        <!-- ScrollBar Style -->
-
-        <Style TargetType="ScrollBar">
-
-            <Setter Property="Width"
-                    Value="10"/>
-
-            <Setter Property="Background"
-                    Value="Transparent"/>
-
-        </Style>
-
-        <Style TargetType="Thumb">
-
-            <Setter Property="Background"
-                    Value="#C2C2C2"/>
-
-            <Setter Property="Template">
-
-                <Setter.Value>
-
-                    <ControlTemplate TargetType="Thumb">
-
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="5"/>
-
-                    </ControlTemplate>
-
-                </Setter.Value>
-
-            </Setter>
-
-        </Style>
-
-        <!-- Button Style -->
 
         <Style x:Key="ModernButtonStyle"
                TargetType="Button">
@@ -513,174 +361,117 @@
 
         </Grid.RowDefinitions>
 
-        <!-- Filters -->
-
         <Border Background="White"
-        CornerRadius="14"
-        BorderBrush="#DDDDDD"
-        BorderThickness="1"
-        Padding="18"
-        Margin="0,0,0,20">
+                CornerRadius="14"
+                BorderBrush="#DDDDDD"
+                BorderThickness="1"
+                Padding="18"
+                Margin="0,0,0,20">
 
-            <StackPanel>
+            <Grid>
 
-                <!-- Search + Category + Allergen -->
+                <Grid.ColumnDefinitions>
 
-                <Grid>
+                    <ColumnDefinition Width="2*"/>
 
-                    <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="220"/>
 
-                        <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="220"/>
 
-                        <ColumnDefinition Width="220"/>
+                </Grid.ColumnDefinitions>
 
-                        <ColumnDefinition Width="220"/>
+                <TextBox Grid.Column="0"
+                         Style="{StaticResource ModernTextBoxStyle}"
+                         Text="{Binding SearchText,
+                                        UpdateSourceTrigger=PropertyChanged}"/>
 
-                    </Grid.ColumnDefinitions>
+                <ComboBox Grid.Column="1"
+                          Margin="20,0,0,0"
+                          Style="{StaticResource ModernComboBoxStyle}"
+                          ItemsSource="{Binding Categories}"
+                          SelectedItem="{Binding SelectedCategory}"/>
 
-                    <!-- Search -->
+                <ComboBox Grid.Column="2"
+                          Margin="20,0,0,0"
+                          Style="{StaticResource ModernComboBoxStyle}"
+                          ItemsSource="{Binding Allergens}"
+                          SelectedItem="{Binding SelectedAllergen}"/>
 
-                    <TextBox Grid.Column="0"
-                     Style="{StaticResource ModernTextBoxStyle}"
-                     Text="{Binding SearchText,
-                                    UpdateSourceTrigger=PropertyChanged}"/>
-
-                    <!-- Category -->
-
-                    <ComboBox Grid.Column="1"
-                      Margin="20,0,0,0"
-                      Style="{StaticResource ModernComboBoxStyle}"
-                      ItemsSource="{Binding Categories}"
-                      SelectedItem="{Binding SelectedCategory}"/>
-
-                    <!-- Allergen -->
-
-                    <ComboBox Grid.Column="2"
-                      Margin="20,0,0,0"
-                      Style="{StaticResource ModernComboBoxStyle}"
-                      ItemsSource="{Binding Allergens}"
-                      SelectedItem="{Binding SelectedAllergen}"/>
-
-                </Grid>
-
-            </StackPanel>
+            </Grid>
 
         </Border>
-
-        <!-- Dishes -->
 
         <ScrollViewer Grid.Row="1"
                       VerticalScrollBarVisibility="Auto">
 
-            <ItemsControl ItemsSource="{Binding Dishes}">
+            <StackPanel>
 
-                <ItemsControl.ItemsPanel>
+                <!-- Menus -->
 
-                    <ItemsPanelTemplate>
+                <TextBlock Text="Menus"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Margin="10,0,0,18"
+                           Foreground="#333333"/>
 
-                        <WrapPanel ItemWidth="280"/>
+                <ItemsControl ItemsSource="{Binding Menus}">
 
-                    </ItemsPanelTemplate>
+                    <ItemsControl.ItemsPanel>
 
-                </ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
 
-                <ItemsControl.ItemTemplate>
+                            <WrapPanel ItemWidth="280"/>
 
-                    <DataTemplate>
+                        </ItemsPanelTemplate>
 
-                        <Border Width="260"
-                                Height="360"
-                                Margin="10"
-                                Padding="18"
-                                Background="White"
-                                CornerRadius="14"
-                                BorderBrush="#DDDDDD"
-                                BorderThickness="1">
+                    </ItemsControl.ItemsPanel>
 
-                            <Grid>
+                    <ItemsControl.ItemTemplate>
 
-                                <Grid.RowDefinitions>
+                        <DataTemplate>
 
-                                    <RowDefinition Height="*"/>
-
-                                    <RowDefinition Height="Auto"/>
-
-                                </Grid.RowDefinitions>
-
-                                <!-- Content -->
+                            <Border Width="260"
+                                    Margin="10"
+                                    Padding="18"
+                                    Background="White"
+                                    CornerRadius="14"
+                                    BorderBrush="#DDDDDD"
+                                    BorderThickness="1">
 
                                 <StackPanel>
-
-                                    <!-- Dish Name -->
 
                                     <TextBlock Text="{Binding Name}"
                                                FontSize="20"
                                                FontWeight="Bold"
                                                Foreground="#333333"
-                                               TextWrapping="Wrap"
-                                               MinHeight="52"/>
+                                               TextWrapping="Wrap"/>
 
-                                    <!-- Category -->
-
-                                    <TextBlock Text="{Binding Category.Name}"
-                                               FontSize="13"
-                                               Foreground="#888888"
-                                               Margin="0,4,0,12"/>
-
-                                    <!-- Price -->
-
-                                    <TextBlock FontSize="18"
-                                               FontWeight="SemiBold"
-                                               Foreground="#5F5F5F">
-
-                                        <Run Text="{Binding Price}"/>
-
-                                        <Run Text=" RON"/>
-
-                                    </TextBlock>
-
-                                    <!-- Portion -->
-
-                                    <TextBlock Margin="0,6,0,0"
+                                    <TextBlock Margin="0,8,0,14"
+                                               FontSize="14"
                                                Foreground="#666666">
 
-                                        <Run Text="{Binding PortionQuantity}"/>
+                                        <Run Text="Discount: "/>
 
-                                        <Run Text=" "/>
+                                        <Run Text="{Binding DiscountPercent}"/>
 
-                                        <Run Text="{Binding Unit}"/>
+                                        <Run Text="%"/>
 
                                     </TextBlock>
 
-                                    <!-- Allergens -->
-
-                                    <ItemsControl Margin="0,14,0,0"
-                                                  ItemsSource="{Binding DishAllergens}">
-
-                                        <ItemsControl.ItemsPanel>
-
-                                            <ItemsPanelTemplate>
-
-                                                <WrapPanel/>
-
-                                            </ItemsPanelTemplate>
-
-                                        </ItemsControl.ItemsPanel>
+                                    <ItemsControl ItemsSource="{Binding MenuDishes}">
 
                                         <ItemsControl.ItemTemplate>
 
                                             <DataTemplate>
 
-                                                <Border Background="#EFEFEF"
-                                                        CornerRadius="6"
-                                                        Margin="0,0,6,6"
-                                                        Padding="8,4">
+                                                <TextBlock Margin="0,0,0,6"
+                                                           Foreground="#555555">
 
-                                                    <TextBlock Text="{Binding Allergen.Name}"
-                                                               FontSize="12"
-                                                               Foreground="#666666"/>
+                                                    <Run Text="• "/>
 
-                                                </Border>
+                                                    <Run Text="{Binding Dish.Name}"/>
+
+                                                </TextBlock>
 
                                             </DataTemplate>
 
@@ -688,52 +479,178 @@
 
                                     </ItemsControl>
 
-                                    <!-- Availability -->
-
-                                    <TextBlock Text="Available"
-                                               Foreground="#3A8F3A"
-                                               FontWeight="SemiBold"
-                                               Margin="0,10,0,0"/>
-
-                                </StackPanel>
-
-                                <!-- Buttons -->
-
-                                <Grid Grid.Row="1">
-
-                                    <!-- Client Button -->
-
-                                    <Button Content="Add to Cart"
+                                    <Button Margin="0,18,0,0"
+                                            Content="Add Menu to Cart"
                                             Style="{StaticResource ModernButtonStyle}"
-                                            Command="{Binding DataContext.AddToCartCommand,
+                                            Command="{Binding DataContext.AddMenuToCartCommand,
                                                               RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}"
                                             Visibility="{Binding DataContext.IsClient,
                                                                  RelativeSource={RelativeSource AncestorType=UserControl},
                                                                  Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                                    <!-- Guest Button -->
+                                </StackPanel>
 
-                                    <Button Content="Login to Order"
-                                            Style="{StaticResource ModernButtonStyle}"
-                                            Background="#B5B5B5"
-                                            Cursor="Arrow"
-                                            IsEnabled="False"
-                                            Visibility="{Binding DataContext.IsClient,
-                                                                 RelativeSource={RelativeSource AncestorType=UserControl},
-                                                                 Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+                            </Border>
+
+                        </DataTemplate>
+
+                    </ItemsControl.ItemTemplate>
+
+                </ItemsControl>
+
+                <!-- Dishes -->
+
+                <TextBlock Text="Dishes"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           Margin="10,18,0,18"
+                           Foreground="#333333"/>
+
+                <ItemsControl ItemsSource="{Binding Dishes}">
+
+                    <ItemsControl.ItemsPanel>
+
+                        <ItemsPanelTemplate>
+
+                            <WrapPanel ItemWidth="280"/>
+
+                        </ItemsPanelTemplate>
+
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+
+                        <DataTemplate>
+
+                            <Border Width="260"
+                                    Height="360"
+                                    Margin="10"
+                                    Padding="18"
+                                    Background="White"
+                                    CornerRadius="14"
+                                    BorderBrush="#DDDDDD"
+                                    BorderThickness="1">
+
+                                <Grid>
+
+                                    <Grid.RowDefinitions>
+
+                                        <RowDefinition Height="*"/>
+
+                                        <RowDefinition Height="Auto"/>
+
+                                    </Grid.RowDefinitions>
+
+                                    <StackPanel>
+
+                                        <TextBlock Text="{Binding Name}"
+                                                   FontSize="20"
+                                                   FontWeight="Bold"
+                                                   Foreground="#333333"
+                                                   TextWrapping="Wrap"
+                                                   MinHeight="52"/>
+
+                                        <TextBlock Text="{Binding Category.Name}"
+                                                   FontSize="13"
+                                                   Foreground="#888888"
+                                                   Margin="0,4,0,12"/>
+
+                                        <TextBlock FontSize="18"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="#5F5F5F">
+
+                                            <Run Text="{Binding Price}"/>
+
+                                            <Run Text=" RON"/>
+
+                                        </TextBlock>
+
+                                        <TextBlock Margin="0,6,0,0"
+                                                   Foreground="#666666">
+
+                                            <Run Text="{Binding PortionQuantity}"/>
+
+                                            <Run Text=" "/>
+
+                                            <Run Text="{Binding Unit}"/>
+
+                                        </TextBlock>
+
+                                        <ItemsControl Margin="0,14,0,0"
+                                                      ItemsSource="{Binding DishAllergens}">
+
+                                            <ItemsControl.ItemsPanel>
+
+                                                <ItemsPanelTemplate>
+
+                                                    <WrapPanel/>
+
+                                                </ItemsPanelTemplate>
+
+                                            </ItemsControl.ItemsPanel>
+
+                                            <ItemsControl.ItemTemplate>
+
+                                                <DataTemplate>
+
+                                                    <Border Background="#EFEFEF"
+                                                            CornerRadius="6"
+                                                            Margin="0,0,6,6"
+                                                            Padding="8,4">
+
+                                                        <TextBlock Text="{Binding Allergen.Name}"
+                                                                   FontSize="12"
+                                                                   Foreground="#666666"/>
+
+                                                    </Border>
+
+                                                </DataTemplate>
+
+                                            </ItemsControl.ItemTemplate>
+
+                                        </ItemsControl>
+
+                                        <TextBlock Text="Available"
+                                                   Foreground="#3A8F3A"
+                                                   FontWeight="SemiBold"
+                                                   Margin="0,10,0,0"/>
+
+                                    </StackPanel>
+
+                                    <Grid Grid.Row="1">
+
+                                        <Button Content="Add to Cart"
+                                                Style="{StaticResource ModernButtonStyle}"
+                                                Command="{Binding DataContext.AddToCartCommand,
+                                                                  RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}"
+                                                Visibility="{Binding DataContext.IsClient,
+                                                                     RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                     Converter={StaticResource BooleanToVisibilityConverter}}"/>
+
+                                        <Button Content="Login to Order"
+                                                Style="{StaticResource ModernButtonStyle}"
+                                                Background="#B5B5B5"
+                                                Cursor="Arrow"
+                                                IsEnabled="False"
+                                                Visibility="{Binding DataContext.IsClient,
+                                                                     RelativeSource={RelativeSource AncestorType=UserControl},
+                                                                     Converter={StaticResource InverseBooleanToVisibilityConverter}}"/>
+
+                                    </Grid>
 
                                 </Grid>
 
-                            </Grid>
+                            </Border>
 
-                        </Border>
+                        </DataTemplate>
 
-                    </DataTemplate>
+                    </ItemsControl.ItemTemplate>
 
-                </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-            </ItemsControl>
+            </StackPanel>
 
         </ScrollViewer>
 

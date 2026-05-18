@@ -6,17 +6,32 @@ namespace DataAccessLayer.Repositories;
 
 public class DishRepository
 {
+    #region Get
+
     public List<Dish> GetAllAvailable()
     {
-        using RestaurantDbContext context = new();
+        using RestaurantDbContext context =
+            new();
 
         return context.Dishes
-            .Include(dish => dish.Category)
-            .Include(dish => dish.DishAllergens)
-                .ThenInclude(
-                    dishAllergen => dishAllergen.Allergen)
-            .Where(dish => dish.IsAvailable)
-            .OrderBy(dish => dish.Name)
+            .Include(
+                dish => dish.Category)
+
+            .Include(
+                dish => dish.DishAllergens)
+
+            .ThenInclude(
+                dishAllergen =>
+                    dishAllergen.Allergen)
+
+            .Where(
+                dish => dish.IsAvailable)
+
+            .OrderBy(
+                dish => dish.Name)
+
             .ToList();
     }
+
+    #endregion
 }

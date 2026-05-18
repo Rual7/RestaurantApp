@@ -3,7 +3,8 @@ using ViewModels;
 
 namespace RestaurantApp.Views.Customer;
 
-public partial class CartView : UserControl
+public partial class CartView
+    : UserControl
 {
     public CartView()
     {

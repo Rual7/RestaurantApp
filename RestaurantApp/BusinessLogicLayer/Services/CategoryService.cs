@@ -1,6 +1,4 @@
-﻿// CategoryService.cs
-
-using DataAccessLayer.Repositories;
+﻿using DataAccessLayer.Repositories;
 using Models;
 
 namespace BusinessLogicLayer.Services;
@@ -10,30 +8,32 @@ public class CategoryService
     private readonly CategoryRepository _categoryRepository =
         new();
 
-    // =====================================================
-    // Get
-    // =====================================================
+    #region Get
 
     public List<Category> GetAll()
     {
         return _categoryRepository.GetAll();
     }
 
-    // =====================================================
-    // Add
-    // =====================================================
+    #endregion
 
-    public void Add(Category category)
+    #region Add
+
+    public void Add(
+        Category category)
     {
         _categoryRepository.Add(category);
     }
 
-    // =====================================================
-    // Delete
-    // =====================================================
+    #endregion
 
-    public void Delete(int id)
+    #region Delete
+
+    public void Delete(
+        int id)
     {
         _categoryRepository.Delete(id);
     }
+
+    #endregion
 }

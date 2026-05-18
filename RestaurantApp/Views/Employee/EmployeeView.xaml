@@ -1,6 +1,4 @@
-﻿<!-- EmployeeView.xaml -->
-
-<UserControl x:Class="RestaurantApp.Views.Employee.EmployeeView"
+﻿<UserControl x:Class="RestaurantApp.Views.Employee.EmployeeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -9,17 +7,9 @@
              mc:Ignorable="d"
              Background="#F5F5F5">
 
-    <UserControl.DataContext>
-
-        <viewModels:EmployeeViewModel/>
-
-    </UserControl.DataContext>
-
     <UserControl.Resources>
-
-        <!-- ===================================================== -->
+        
         <!-- ScrollBar -->
-        <!-- ===================================================== -->
 
         <Style TargetType="ScrollBar">
 
@@ -53,9 +43,7 @@
 
         </Style>
 
-        <!-- ===================================================== -->
         <!-- Modern Button -->
-        <!-- ===================================================== -->
 
         <Style x:Key="ModernButtonStyle"
                TargetType="Button">
@@ -126,9 +114,7 @@
 
         </Style>
 
-        <!-- ===================================================== -->
         <!-- Danger Button -->
-        <!-- ===================================================== -->
 
         <Style x:Key="DangerButtonStyle"
                TargetType="Button">
@@ -203,9 +189,7 @@
 
         </Style>
 
-        <!-- ===================================================== -->
         <!-- TextBox -->
-        <!-- ===================================================== -->
 
         <Style x:Key="ModernTextBoxStyle"
                TargetType="TextBox">
@@ -289,15 +273,11 @@
 
         </Grid.ColumnDefinitions>
 
-        <!-- ===================================================== -->
         <!-- CONTENT -->
-        <!-- ===================================================== -->
 
         <Grid Margin="0,0,20,0">
 
-            <!-- ===================================================== -->
             <!-- Categories -->
-            <!-- ===================================================== -->
 
             <StackPanel Visibility="{Binding IsCategoriesVisible,
                          Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -405,9 +385,7 @@
 
             </StackPanel>
 
-            <!-- ===================================================== -->
             <!-- Allergens -->
-            <!-- ===================================================== -->
 
             <StackPanel Visibility="{Binding IsAllergensVisible,
                          Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -513,9 +491,7 @@
 
             </StackPanel>
 
-            <!-- ===================================================== -->
             <!-- Low Stock -->
-            <!-- ===================================================== -->
 
             <StackPanel Visibility="{Binding IsLowStockVisible,
                          Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -602,9 +578,7 @@
 
         </Grid>
 
-        <!-- ===================================================== -->
         <!-- SIDEBAR -->
-        <!-- ===================================================== -->
 
         <Border Grid.Column="1"
                 Background="White"

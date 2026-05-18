@@ -1,15 +1,11 @@
-﻿// AllergenRepository.cs
-
-using DataAccessLayer.Context;
+﻿using DataAccessLayer.Context;
 using Models;
 
 namespace DataAccessLayer.Repositories;
 
 public class AllergenRepository
 {
-    // =====================================================
-    // Get
-    // =====================================================
+    #region Get
 
     public List<Allergen> GetAll()
     {
@@ -17,15 +13,17 @@ public class AllergenRepository
             new();
 
         return context.Allergens
-            .OrderBy(allergen => allergen.Name)
+            .OrderBy(
+                allergen => allergen.Name)
             .ToList();
     }
 
-    // =====================================================
-    // Add
-    // =====================================================
+    #endregion
 
-    public void Add(Allergen allergen)
+    #region Add
+
+    public void Add(
+        Allergen allergen)
     {
         using RestaurantDbContext context =
             new();
@@ -35,19 +33,19 @@ public class AllergenRepository
         context.SaveChanges();
     }
 
-    // =====================================================
-    // Delete
-    // =====================================================
+    #endregion
 
-    public void Delete(int id)
+    #region Delete
+
+    public void Delete(
+        int id)
     {
         using RestaurantDbContext context =
             new();
 
         Allergen? allergen =
-            context.Allergens
-                .FirstOrDefault(
-                    allergen => allergen.Id == id);
+            context.Allergens.FirstOrDefault(
+                allergen => allergen.Id == id);
 
         if (allergen == null)
         {
@@ -58,4 +56,6 @@ public class AllergenRepository
 
         context.SaveChanges();
     }
+
+    #endregion
 }

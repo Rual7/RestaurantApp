@@ -1,6 +1,4 @@
-﻿// OrderRepository.cs
-
-using DataAccessLayer.Context;
+﻿using DataAccessLayer.Context;
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Enums;
@@ -9,9 +7,7 @@ namespace DataAccessLayer.Repositories;
 
 public class OrderRepository
 {
-    // =====================================================
-    // User Orders
-    // =====================================================
+    #region User Orders
 
     public List<Order> GetOrdersByUser(
         int userId)
@@ -22,14 +18,14 @@ public class OrderRepository
         return context.Orders
             .Include(order => order.OrderItems)
                 .ThenInclude(orderItem => orderItem.Dish)
+            .Include(order => order.OrderItems)
+                .ThenInclude(orderItem => orderItem.Menu)
+                    .ThenInclude(menu => menu.MenuDishes)
+                        .ThenInclude(menuDish => menuDish.Dish)
             .Where(order => order.UserId == userId)
             .OrderByDescending(order => order.CreatedAt)
             .ToList();
     }
-
-    // =====================================================
-    // Active User Orders
-    // =====================================================
 
     public List<Order> GetActiveOrdersByUser(
         int userId)
@@ -40,6 +36,10 @@ public class OrderRepository
         return context.Orders
             .Include(order => order.OrderItems)
                 .ThenInclude(orderItem => orderItem.Dish)
+            .Include(order => order.OrderItems)
+                .ThenInclude(orderItem => orderItem.Menu)
+                    .ThenInclude(menu => menu.MenuDishes)
+                        .ThenInclude(menuDish => menuDish.Dish)
             .Where(order =>
                 order.UserId == userId &&
                 order.Status != OrderStatus.Delivered &&
@@ -48,9 +48,9 @@ public class OrderRepository
             .ToList();
     }
 
-    // =====================================================
-    // All Orders
-    // =====================================================
+    #endregion
+
+    #region Employee Orders
 
     public List<Order> GetAllOrders()
     {
@@ -61,13 +61,13 @@ public class OrderRepository
             .Include(order => order.User)
             .Include(order => order.OrderItems)
                 .ThenInclude(orderItem => orderItem.Dish)
+            .Include(order => order.OrderItems)
+                .ThenInclude(orderItem => orderItem.Menu)
+                    .ThenInclude(menu => menu.MenuDishes)
+                        .ThenInclude(menuDish => menuDish.Dish)
             .OrderByDescending(order => order.CreatedAt)
             .ToList();
     }
-
-    // =====================================================
-    // Active Orders
-    // =====================================================
 
     public List<Order> GetAllActiveOrders()
     {
@@ -78,6 +78,10 @@ public class OrderRepository
             .Include(order => order.User)
             .Include(order => order.OrderItems)
                 .ThenInclude(orderItem => orderItem.Dish)
+            .Include(order => order.OrderItems)
+                .ThenInclude(orderItem => orderItem.Menu)
+                    .ThenInclude(menu => menu.MenuDishes)
+                        .ThenInclude(menuDish => menuDish.Dish)
             .Where(order =>
                 order.Status != OrderStatus.Delivered &&
                 order.Status != OrderStatus.Cancelled)
@@ -85,9 +89,9 @@ public class OrderRepository
             .ToList();
     }
 
-    // =====================================================
-    // Cancel Order
-    // =====================================================
+    #endregion
+
+    #region Status
 
     public bool CancelOrder(
         int orderId,
@@ -108,7 +112,9 @@ public class OrderRepository
         }
 
         if (order.Status ==
-            OrderStatus.Delivered)
+            OrderStatus.Delivered ||
+            order.Status ==
+            OrderStatus.Cancelled)
         {
             return false;
         }
@@ -120,10 +126,6 @@ public class OrderRepository
 
         return true;
     }
-
-    // =====================================================
-    // Update Status
-    // =====================================================
 
     public void UpdateStatus(
         int orderId,
@@ -145,4 +147,6 @@ public class OrderRepository
 
         context.SaveChanges();
     }
+
+    #endregion
 }

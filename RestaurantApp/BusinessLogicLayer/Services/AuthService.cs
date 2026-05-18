@@ -7,6 +7,8 @@ namespace BusinessLogicLayer.Services;
 
 public class AuthService
 {
+    #region Register
+
     public bool Register(
         string firstName,
         string lastName,
@@ -15,26 +17,30 @@ public class AuthService
         string address,
         string password)
     {
-        using RestaurantDbContext context = new();
+        using RestaurantDbContext context =
+            new();
 
-        bool userExists = context.Users.Any(
-            user => user.Email == email);
+        bool userExists =
+            context.Users.Any(
+                user => user.Email == email);
 
         if (userExists)
         {
             return false;
         }
 
-        User user = new()
-        {
-            FirstName = firstName,
-            LastName = lastName,
-            Email = email,
-            PhoneNumber = phoneNumber,
-            Address = address,
-            PasswordHash = PasswordHelper.HashPassword(password),
-            Role = UserRole.Client
-        };
+        User user =
+            new()
+            {
+                FirstName = firstName,
+                LastName = lastName,
+                Email = email,
+                PhoneNumber = phoneNumber,
+                Address = address,
+                PasswordHash =
+                    PasswordHelper.HashPassword(password),
+                Role = UserRole.Client
+            };
 
         context.Users.Add(user);
 
@@ -43,11 +49,16 @@ public class AuthService
         return true;
     }
 
+    #endregion
+
+    #region Login
+
     public User? Login(
         string email,
         string password)
     {
-        using RestaurantDbContext context = new();
+        using RestaurantDbContext context =
+            new();
 
         string hashedPassword =
             PasswordHelper.HashPassword(password);
@@ -57,4 +68,6 @@ public class AuthService
                 user.Email == email &&
                 user.PasswordHash == hashedPassword);
     }
+
+    #endregion
 }

@@ -7,86 +7,111 @@ using System.Windows.Input;
 
 namespace ViewModels;
 
-public class LoginViewModel : BaseViewModel
+public class LoginViewModel
+    : BaseViewModel
 {
-    private readonly AuthService _authService;
+    private readonly AuthService _authService =
+        new();
+
+    private string _email =
+        string.Empty;
+
+    private string _password =
+        string.Empty;
+
+    private string _emailError =
+        string.Empty;
+
+    private string _passwordError =
+        string.Empty;
 
     public LoginViewModel()
     {
-        _authService = new AuthService();
-
-        LoginCommand = new RelayCommand(_ => Login());
+        LoginCommand =
+            new RelayCommand(
+                _ => Login());
     }
 
-    // =========================
-    // Properties
-    // =========================
-
-    private string _email = string.Empty;
+    #region Properties
 
     public string Email
     {
         get => _email;
+
         set
         {
-            if (SetProperty(ref _email, value))
+            if (SetProperty(
+                    ref _email,
+                    value))
             {
-                EmailError = string.Empty;
+                EmailError =
+                    string.Empty;
             }
         }
     }
-
-    private string _password = string.Empty;
 
     public string Password
     {
         get => _password;
+
         set
         {
-            if (SetProperty(ref _password, value))
+            if (SetProperty(
+                    ref _password,
+                    value))
             {
-                PasswordError = string.Empty;
+                PasswordError =
+                    string.Empty;
             }
         }
     }
 
-    // =========================
-    // Error Properties
-    // =========================
+    #endregion
 
-    private string _emailError = string.Empty;
+    #region Errors
 
     public string EmailError
     {
         get => _emailError;
-        set => SetProperty(ref _emailError, value);
-    }
 
-    private string _passwordError = string.Empty;
+        set => SetProperty(
+            ref _emailError,
+            value);
+    }
 
     public string PasswordError
     {
         get => _passwordError;
-        set => SetProperty(ref _passwordError, value);
+
+        set => SetProperty(
+            ref _passwordError,
+            value);
     }
 
-    // =========================
-    // Commands
-    // =========================
+    #endregion
 
-    public ICommand LoginCommand { get; }
+    #region Commands
 
-    // =========================
-    // Methods
-    // =========================
+    public ICommand LoginCommand
+    {
+        get;
+    }
+
+    #endregion
+
+    #region Login
 
     private void Login()
     {
-        bool isValid = true;
+        bool isValid =
+            true;
 
-        if (string.IsNullOrWhiteSpace(Email))
+        if (string.IsNullOrWhiteSpace(
+                Email))
         {
-            EmailError = "Email is required.";
+            EmailError =
+                "Email is required.";
+
             isValid = false;
         }
         else if (!Regex.IsMatch(
@@ -99,9 +124,12 @@ public class LoginViewModel : BaseViewModel
             isValid = false;
         }
 
-        if (string.IsNullOrWhiteSpace(Password))
+        if (string.IsNullOrWhiteSpace(
+                Password))
         {
-            PasswordError = "Password is required.";
+            PasswordError =
+                "Password is required.";
+
             isValid = false;
         }
 
@@ -110,9 +138,10 @@ public class LoginViewModel : BaseViewModel
             return;
         }
 
-        var user = _authService.Login(
-            Email,
-            Password);
+        var user =
+            _authService.Login(
+                Email,
+                Password);
 
         if (user == null)
         {
@@ -131,7 +160,10 @@ public class LoginViewModel : BaseViewModel
 
         Application.Current.Windows
             .OfType<Window>()
-            .SingleOrDefault(window => window.IsActive)?
+            .SingleOrDefault(
+                window => window.IsActive)?
             .Close();
     }
+
+    #endregion
 }

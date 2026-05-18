@@ -1,6 +1,4 @@
-﻿// MenuViewModel.cs
-
-using BusinessLogicLayer.Helpers;
+﻿using BusinessLogicLayer.Helpers;
 using BusinessLogicLayer.Services;
 using Models;
 using RestaurantApp.Views.Shared;
@@ -9,54 +7,80 @@ using System.Windows.Input;
 
 namespace ViewModels;
 
-public class MenuViewModel : BaseViewModel
+public class MenuViewModel
+    : BaseViewModel
 {
-    private readonly MenuService _menuService;
+    private readonly MenuService _menuService =
+        new();
 
-    private readonly CartService _cartService;
+    private readonly CartService _cartService =
+        CartService.Instance;
+
+    private ObservableCollection<Dish> _dishes =
+        [];
+
+    private ObservableCollection<Menu> _menus =
+    [];
+
+    public ObservableCollection<Menu> Menus
+    {
+        get => _menus;
+        set => SetProperty(ref _menus, value);
+    }
+
+    private string _searchText =
+        string.Empty;
+
+    private List<string> _categories =
+        [];
+
+    private string _selectedCategory =
+        "All Categories";
+
+    private List<string> _allergens =
+        [];
+
+    private string _selectedAllergen =
+        "All Allergens";
 
     public MenuViewModel()
     {
-        _menuService =
-            new MenuService();
-
-        _cartService =
-            new CartService();
-
         AddToCartCommand =
             new RelayCommand(
                 AddToCart);
+
+        AddMenuToCartCommand =
+            new RelayCommand(
+                AddMenuToCart);
 
         LoadCategories();
 
         LoadAllergens();
 
         LoadDishes();
+
+        LoadMenus();
     }
 
-    // =====================================================
-    // Dishes
-    // =====================================================
-
-    private ObservableCollection<Dish> _dishes =
-        [];
+    #region Dishes
 
     public ObservableCollection<Dish> Dishes
     {
         get => _dishes;
-        set => SetProperty(ref _dishes, value);
+
+        set => SetProperty(
+            ref _dishes,
+            value);
     }
 
-    // =====================================================
-    // Search
-    // =====================================================
+    #endregion
 
-    private string _searchText =
-        string.Empty;
+    #region Search
 
     public string SearchText
     {
         get => _searchText;
+
         set
         {
             if (SetProperty(
@@ -68,25 +92,23 @@ public class MenuViewModel : BaseViewModel
         }
     }
 
-    // =====================================================
-    // Categories
-    // =====================================================
+    #endregion
 
-    private List<string> _categories =
-        [];
+    #region Categories
 
     public List<string> Categories
     {
         get => _categories;
-        set => SetProperty(ref _categories, value);
-    }
 
-    private string _selectedCategory =
-        "All Categories";
+        set => SetProperty(
+            ref _categories,
+            value);
+    }
 
     public string SelectedCategory
     {
         get => _selectedCategory;
+
         set
         {
             if (SetProperty(
@@ -98,25 +120,23 @@ public class MenuViewModel : BaseViewModel
         }
     }
 
-    // =====================================================
-    // Allergens
-    // =====================================================
+    #endregion
 
-    private List<string> _allergens =
-        [];
+    #region Allergens
 
     public List<string> Allergens
     {
         get => _allergens;
-        set => SetProperty(ref _allergens, value);
-    }
 
-    private string _selectedAllergen =
-        "All Allergens";
+        set => SetProperty(
+            ref _allergens,
+            value);
+    }
 
     public string SelectedAllergen
     {
         get => _selectedAllergen;
+
         set
         {
             if (SetProperty(
@@ -128,25 +148,29 @@ public class MenuViewModel : BaseViewModel
         }
     }
 
-    // =====================================================
-    // Client
-    // =====================================================
+    #endregion
+
+    #region Client
 
     public bool IsClient =>
         SessionManager.IsAuthenticated;
 
-    // =====================================================
-    // Commands
-    // =====================================================
+    #endregion
+
+    #region Commands
 
     public ICommand AddToCartCommand
     {
         get;
     }
+    public ICommand AddMenuToCartCommand
+    {
+        get;
+    }
 
-    // =====================================================
-    // Load Categories
-    // =====================================================
+    #endregion
+
+    #region Load Categories
 
     private void LoadCategories()
     {
@@ -156,17 +180,20 @@ public class MenuViewModel : BaseViewModel
 
             .._menuService
                 .GetMenu()
+
                 .Select(
                     dish => dish.Category.Name)
+
                 .Distinct()
+
                 .OrderBy(
                     category => category)
         ];
     }
 
-    // =====================================================
-    // Load Allergens
-    // =====================================================
+    #endregion
+
+    #region Load Allergens
 
     private void LoadAllergens()
     {
@@ -176,19 +203,24 @@ public class MenuViewModel : BaseViewModel
 
             .._menuService
                 .GetMenu()
+
                 .SelectMany(
                     dish => dish.DishAllergens)
+
                 .Select(
-                    allergen => allergen.Allergen.Name)
+                    allergen =>
+                        allergen.Allergen.Name)
+
                 .Distinct()
+
                 .OrderBy(
                     allergen => allergen)
         ];
     }
 
-    // =====================================================
-    // Load Dishes
-    // =====================================================
+    #endregion
+
+    #region Load Dishes
 
     private void LoadDishes()
     {
@@ -197,18 +229,24 @@ public class MenuViewModel : BaseViewModel
                 _menuService.GetMenu());
     }
 
-    // =====================================================
-    // Filters
-    // =====================================================
+    #endregion
+
+    #region Load Menus
+    private void LoadMenus()
+    {
+        Menus =
+            new ObservableCollection<Menu>(
+                _menuService.GetMenus());
+    }
+
+    #endregion
+
+    #region Filters
 
     private void ApplyFilters()
     {
         IEnumerable<Dish> dishes =
             _menuService.GetMenu();
-
-        // =================================================
-        // Search
-        // =================================================
 
         if (!string.IsNullOrWhiteSpace(
                 SearchText))
@@ -221,10 +259,6 @@ public class MenuViewModel : BaseViewModel
                             .OrdinalIgnoreCase));
         }
 
-        // =================================================
-        // Category
-        // =================================================
-
         if (SelectedCategory !=
             "All Categories")
         {
@@ -233,10 +267,6 @@ public class MenuViewModel : BaseViewModel
                     dish.Category.Name ==
                     SelectedCategory);
         }
-
-        // =================================================
-        // Allergen
-        // =================================================
 
         if (SelectedAllergen !=
             "All Allergens")
@@ -254,9 +284,9 @@ public class MenuViewModel : BaseViewModel
                 dishes);
     }
 
-    // =====================================================
-    // Add To Cart
-    // =====================================================
+    #endregion
+
+    #region Add To Cart
 
     private void AddToCart(
         object? parameter)
@@ -273,4 +303,25 @@ public class MenuViewModel : BaseViewModel
             "Cart",
             $"{dish.Name} added to cart.");
     }
+
+    #endregion
+
+    #region Add Menu To Cart
+
+    private void AddMenuToCart(
+    object? parameter)
+    {
+        if (parameter is not Menu menu)
+        {
+            return;
+        }
+
+        _cartService.AddMenuToCart(menu);
+
+        CustomMessageBox.Show(
+            "Menu",
+            $"{menu.Name} added to cart.");
+    }
+
+    #endregion
 }

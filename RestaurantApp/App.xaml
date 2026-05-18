@@ -6,6 +6,8 @@
 
     <Application.Resources>
 
+        <!-- Converters -->
+
         <BooleanToVisibilityConverter
             x:Key="BooleanToVisibilityConverter"/>
 

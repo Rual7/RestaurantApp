@@ -8,71 +8,108 @@ public class CartService
     private static readonly CartService _instance =
         new();
 
-    public static CartService Instance =>
-        _instance;
-
     private readonly ObservableCollection<CartItem> _items =
         new();
 
+    public static CartService Instance =>
+        _instance;
+
     public ObservableCollection<CartItem> Items =>
         _items;
-
-    public event Action? CartChanged;
 
     public decimal Total =>
         _items.Sum(
             item => item.TotalPrice);
 
-    // =====================================================
-    // Add
-    // =====================================================
+    public event Action? CartChanged;
 
-    public void AddToCart(Dish dish)
+    #region Add
+
+    public void AddToCart(
+        Dish dish)
     {
         CartItem? existingItem =
             _items.FirstOrDefault(
-                item => item.Dish.Id == dish.Id);
+                item =>
+                    item.Dish?.Id ==
+                    dish.Id);
 
         if (existingItem != null)
         {
             existingItem.Quantity++;
+
+            NotifyCartChanged();
+
+            return;
         }
-        else
-        {
-            _items.Add(
-                new CartItem
-                {
-                    Dish = dish,
-                    Quantity = 1
-                });
-        }
+
+        CartItem item =
+            new()
+            {
+                Dish = dish,
+                Quantity = 1
+            };
+
+        _items.Add(item);
 
         NotifyCartChanged();
     }
 
-    // =====================================================
-    // Remove
-    // =====================================================
+    public void AddMenuToCart(Menu menu)
+    {
+        CartItem? existingItem =
+            _items.FirstOrDefault(
+                item =>
+                    item.Menu?.Id ==
+                    menu.Id);
 
-    public void RemoveFromCart(CartItem item)
+        if (existingItem != null)
+        {
+            existingItem.Quantity++;
+
+            NotifyCartChanged();
+
+            return;
+        }
+
+        CartItem item =
+            new()
+            {
+                Menu = menu,
+                Quantity = 1
+            };
+
+        _items.Add(item);
+
+        NotifyCartChanged();
+    }
+
+    #endregion
+
+    #region Remove
+
+    public void RemoveFromCart(
+        CartItem item)
     {
         _items.Remove(item);
 
         NotifyCartChanged();
     }
 
-    // =====================================================
-    // Quantity
-    // =====================================================
+    #endregion
 
-    public void IncreaseQuantity(CartItem item)
+    #region Quantity
+
+    public void IncreaseQuantity(
+        CartItem item)
     {
         item.Quantity++;
 
         NotifyCartChanged();
     }
 
-    public void DecreaseQuantity(CartItem item)
+    public void DecreaseQuantity(
+        CartItem item)
     {
         item.Quantity--;
 
@@ -84,9 +121,9 @@ public class CartService
         NotifyCartChanged();
     }
 
-    // =====================================================
-    // Clear
-    // =====================================================
+    #endregion
+
+    #region Clear
 
     public void ClearCart()
     {
@@ -95,12 +132,14 @@ public class CartService
         NotifyCartChanged();
     }
 
-    // =====================================================
-    // Events
-    // =====================================================
+    #endregion
+
+    #region Events
 
     private void NotifyCartChanged()
     {
         CartChanged?.Invoke();
     }
+
+    #endregion
 }

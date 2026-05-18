@@ -3,12 +3,18 @@ using ViewModels;
 
 namespace RestaurantApp;
 
-public partial class MainWindow : Window
+public partial class MainWindow
+    : Window
 {
+    #region Constructor
+
     public MainWindow()
     {
         InitializeComponent();
 
-        DataContext = new MainWindowViewModel();
+        DataContext =
+            new MainWindowViewModel();
     }
+
+    #endregion
 }

@@ -1,6 +1,4 @@
-﻿// OrdersViewModel.cs
-
-using BusinessLogicLayer.Helpers;
+﻿using BusinessLogicLayer.Helpers;
 using BusinessLogicLayer.Services;
 using Models;
 using Models.Enums;
@@ -10,15 +8,19 @@ using System.Windows.Input;
 
 namespace ViewModels;
 
-public class OrdersViewModel : BaseViewModel
+public class OrdersViewModel
+    : BaseViewModel
 {
-    private readonly OrderService _orderService;
+    private readonly OrderService _orderService =
+        new();
+
+    private ObservableCollection<Order> _orders =
+        [];
+
+    private bool _showOnlyActive;
 
     public OrdersViewModel()
     {
-        _orderService =
-            new OrderService();
-
         CancelOrderCommand =
             new RelayCommand(
                 CancelOrder);
@@ -26,28 +28,25 @@ public class OrdersViewModel : BaseViewModel
         LoadOrders();
     }
 
-    // =====================================================
-    // Orders
-    // =====================================================
-
-    private ObservableCollection<Order> _orders =
-        [];
+    #region Orders
 
     public ObservableCollection<Order> Orders
     {
         get => _orders;
-        set => SetProperty(ref _orders, value);
+
+        set => SetProperty(
+            ref _orders,
+            value);
     }
 
-    // =====================================================
-    // Active Filter
-    // =====================================================
+    #endregion
 
-    private bool _showOnlyActive;
+    #region Active Filter
 
     public bool ShowOnlyActive
     {
         get => _showOnlyActive;
+
         set
         {
             if (SetProperty(
@@ -59,18 +58,18 @@ public class OrdersViewModel : BaseViewModel
         }
     }
 
-    // =====================================================
-    // Commands
-    // =====================================================
+    #endregion
+
+    #region Commands
 
     public ICommand CancelOrderCommand
     {
         get;
     }
 
-    // =====================================================
-    // Load
-    // =====================================================
+    #endregion
+
+    #region Load Orders
 
     private void LoadOrders()
     {
@@ -84,6 +83,7 @@ public class OrdersViewModel : BaseViewModel
             ShowOnlyActive
                 ? _orderService.GetActiveOrders(
                     SessionManager.CurrentUser.Id)
+
                 : _orderService.GetUserOrders(
                     SessionManager.CurrentUser.Id);
 
@@ -92,9 +92,9 @@ public class OrdersViewModel : BaseViewModel
                 orders);
     }
 
-    // =====================================================
-    // Cancel
-    // =====================================================
+    #endregion
+
+    #region Cancel Order
 
     private void CancelOrder(
         object? parameter)
@@ -127,4 +127,6 @@ public class OrdersViewModel : BaseViewModel
             "Order",
             "Order cancelled successfully.");
     }
+
+    #endregion
 }

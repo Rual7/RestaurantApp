@@ -4,67 +4,132 @@ using System.Configuration;
 
 namespace DataAccessLayer.Context;
 
-public class RestaurantDbContext : DbContext
+public class RestaurantDbContext
+    : DbContext
 {
-    public DbSet<User> Users { get; set; }
+    public DbSet<User> Users
+    {
+        get;
+        set;
+    }
 
-    public DbSet<Category> Categories { get; set; }
+    public DbSet<Category> Categories
+    {
+        get;
+        set;
+    }
 
-    public DbSet<Dish> Dishes { get; set; }
+    public DbSet<Dish> Dishes
+    {
+        get;
+        set;
+    }
 
-    public DbSet<Menu> Menus { get; set; }
+    public DbSet<Menu> Menus
+    {
+        get;
+        set;
+    }
 
-    public DbSet<Allergen> Allergens { get; set; }
+    public DbSet<Allergen> Allergens
+    {
+        get;
+        set;
+    }
 
-    public DbSet<DishAllergen> DishAllergens { get; set; }
+    public DbSet<DishAllergen> DishAllergens
+    {
+        get;
+        set;
+    }
 
-    public DbSet<MenuDish> MenuDishes { get; set; }
+    public DbSet<MenuDish> MenuDishes
+    {
+        get;
+        set;
+    }
 
-    public DbSet<Order> Orders { get; set; }
+    public DbSet<Order> Orders
+    {
+        get;
+        set;
+    }
 
-    public DbSet<OrderItem> OrderItems { get; set; }
+    public DbSet<OrderItem> OrderItems
+    {
+        get;
+        set;
+    }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    #region Configuration
+
+    protected override void OnConfiguring(
+        DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
         {
             string connectionString =
                 ConfigurationManager
-                .ConnectionStrings["DefaultConnection"]
-                .ConnectionString;
+                    .ConnectionStrings["DefaultConnection"]
+                    .ConnectionString;
 
-            optionsBuilder.UseNpgsql(connectionString);
+            optionsBuilder.UseNpgsql(
+                connectionString);
         }
     }
 
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    #endregion
+
+    #region Model Creating
+
+    protected override void OnModelCreating(
+        ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<DishAllergen>()
-            .HasKey(da => new { da.DishId, da.AllergenId });
+            .HasKey(
+                dishAllergen =>
+                    new
+                    {
+                        dishAllergen.DishId,
+                        dishAllergen.AllergenId
+                    });
 
         modelBuilder.Entity<MenuDish>()
-            .HasKey(md => new { md.MenuId, md.DishId });
+            .HasKey(
+                menuDish =>
+                    new
+                    {
+                        menuDish.MenuId,
+                        menuDish.DishId
+                    });
 
         modelBuilder.Entity<OrderItem>()
-            .Property(orderItem => orderItem.Price)
+            .Property(
+                orderItem => orderItem.Price)
             .HasColumnType("decimal(18,2)");
 
         modelBuilder.Entity<Order>()
-            .Property(order => order.FoodCost)
+            .Property(
+                order => order.FoodCost)
             .HasColumnType("decimal(18,2)");
 
         modelBuilder.Entity<Order>()
-            .Property(order => order.DeliveryFee)
+            .Property(
+                order => order.DeliveryFee)
             .HasColumnType("decimal(18,2)");
 
         modelBuilder.Entity<Order>()
-            .Property(order => order.DiscountAmount)
+            .Property(
+                order => order.DiscountAmount)
             .HasColumnType("decimal(18,2)");
 
         modelBuilder.Entity<Order>()
-            .Property(order => order.TotalCost)
+            .Property(
+                order => order.TotalCost)
             .HasColumnType("decimal(18,2)");
     }
+
+    #endregion
 }

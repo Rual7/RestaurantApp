@@ -1,6 +1,4 @@
-﻿// EmployeeOrdersViewModel.cs
-
-using BusinessLogicLayer.Services;
+﻿using BusinessLogicLayer.Services;
 using Models;
 using Models.Enums;
 using RestaurantApp.Views.Shared;
@@ -12,13 +10,16 @@ namespace ViewModels;
 public class EmployeeOrdersViewModel
     : BaseViewModel
 {
-    private readonly OrderService _orderService;
+    private readonly OrderService _orderService =
+        new();
+
+    private ObservableCollection<Order> _orders =
+        [];
+
+    private bool _showOnlyActive;
 
     public EmployeeOrdersViewModel()
     {
-        _orderService =
-            new OrderService();
-
         UpdateStatusCommand =
             new RelayCommand(
                 UpdateStatus);
@@ -26,28 +27,21 @@ public class EmployeeOrdersViewModel
         LoadOrders();
     }
 
-    // =====================================================
-    // Orders
-    // =====================================================
-
-    private ObservableCollection<Order> _orders =
-        [];
+    #region Properties
 
     public ObservableCollection<Order> Orders
     {
         get => _orders;
-        set => SetProperty(ref _orders, value);
+
+        set => SetProperty(
+            ref _orders,
+            value);
     }
-
-    // =====================================================
-    // Active Filter
-    // =====================================================
-
-    private bool _showOnlyActive;
 
     public bool ShowOnlyActive
     {
         get => _showOnlyActive;
+
         set
         {
             if (SetProperty(
@@ -59,10 +53,6 @@ public class EmployeeOrdersViewModel
         }
     }
 
-    // =====================================================
-    // Statuses
-    // =====================================================
-
     public List<OrderStatus> Statuses =>
     [
         OrderStatus.Registered,
@@ -72,18 +62,18 @@ public class EmployeeOrdersViewModel
         OrderStatus.Cancelled
     ];
 
-    // =====================================================
-    // Commands
-    // =====================================================
+    #endregion
+
+    #region Commands
 
     public ICommand UpdateStatusCommand
     {
         get;
     }
 
-    // =====================================================
-    // Load Orders
-    // =====================================================
+    #endregion
+
+    #region Load Orders
 
     private void LoadOrders()
     {
@@ -97,9 +87,9 @@ public class EmployeeOrdersViewModel
                 orders);
     }
 
-    // =====================================================
-    // Update Status
-    // =====================================================
+    #endregion
+
+    #region Update Status
 
     private void UpdateStatus(
         object? parameter)
@@ -119,4 +109,6 @@ public class EmployeeOrdersViewModel
 
         LoadOrders();
     }
+
+    #endregion
 }

@@ -5,9 +5,25 @@ namespace Models;
 
 public class CartItem : INotifyPropertyChanged
 {
+    #region Fields
+
     private int _quantity;
 
-    public Dish Dish { get; set; }
+    #endregion
+
+    #region Properties
+
+    public Dish? Dish
+    {
+        get;
+        set;
+    }
+
+    public Menu? Menu
+    {
+        get;
+        set;
+    }
 
     public int Quantity
     {
@@ -17,16 +33,47 @@ public class CartItem : INotifyPropertyChanged
             _quantity = value;
 
             OnPropertyChanged();
+
             OnPropertyChanged(nameof(TotalPrice));
         }
     }
 
-    public decimal TotalPrice =>
-        Dish.Price * Quantity;
+    public decimal UnitPrice
+    {
+        get
+        {
+            if (Dish != null)
+            {
+                return Dish.Price;
+            }
 
-    // =====================================================
-    // INotifyPropertyChanged
-    // =====================================================
+            if (Menu != null)
+            {
+                decimal total =
+                    Menu.MenuDishes.Sum(
+                        menuDish =>
+                            menuDish.Dish.Price);
+
+                return total -
+                       (total *
+                        Menu.DiscountPercent / 100);
+            }
+
+            return 0;
+        }
+    }
+
+    public decimal TotalPrice =>
+        UnitPrice * Quantity;
+
+    public string DisplayName =>
+        Dish?.Name ??
+        Menu?.Name ??
+        string.Empty;
+
+    #endregion
+
+    #region INotifyPropertyChanged
 
     public event PropertyChangedEventHandler?
         PropertyChanged;
@@ -40,4 +87,6 @@ public class CartItem : INotifyPropertyChanged
             new PropertyChangedEventArgs(
                 propertyName));
     }
+
+    #endregion
 }

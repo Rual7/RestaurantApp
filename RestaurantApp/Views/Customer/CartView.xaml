@@ -7,7 +7,7 @@
 
     <UserControl.Resources>
 
-        <!-- Cart Button Style -->
+        <!-- Cart Button -->
 
         <Style x:Key="CartButtonStyle"
                TargetType="Button">
@@ -107,7 +107,7 @@
                            FontWeight="Bold"
                            Foreground="#333333"/>
 
-                <!-- Empty -->
+                <!-- Empty Cart -->
 
                 <TextBlock Grid.Row="1"
                            Text="Cart is empty"
@@ -119,7 +119,7 @@
                                                 Mode=OneWay,
                                                 Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                <!-- Items -->
+                <!-- Cart Items -->
 
                 <ScrollViewer Grid.Row="1"
                               Margin="0,20,0,20"
@@ -165,9 +165,9 @@
 
                                     <StackPanel>
 
-                                        <!-- Name -->
+                                        <!-- Dish Name -->
 
-                                        <TextBlock Text="{Binding Dish.Name,
+                                        <TextBlock Text="{Binding DisplayName,
                                                                   Mode=OneWay}"
                                                    FontSize="16"
                                                    FontWeight="SemiBold"
@@ -180,6 +180,7 @@
                                                    Foreground="#666666">
 
                                             <Run Text="{Binding TotalPrice,
+                                                                StringFormat={}{0:F2},
                                                                 Mode=OneWay}"/>
 
                                             <Run Text=" RON"/>
@@ -285,6 +286,7 @@
                                    Foreground="#5F5F5F">
 
                             <Run Text="{Binding Total,
+                                                StringFormat={}{0:F2},
                                                 Mode=OneWay}"/>
 
                             <Run Text=" RON"/>
@@ -293,14 +295,14 @@
 
                     </Grid>
 
-                    <!-- Clear -->
+                    <!-- Clear Cart -->
 
                     <Button Content="Clear Cart"
                             Height="40"
                             Style="{StaticResource CartButtonStyle}"
                             Command="{Binding ClearCartCommand}"/>
 
-                    <!-- Order -->
+                    <!-- Place Order -->
 
                     <Button Content="Place Order"
                             Height="40"

@@ -1,15 +1,11 @@
-﻿// CategoryRepository.cs
-
-using DataAccessLayer.Context;
+﻿using DataAccessLayer.Context;
 using Models;
 
 namespace DataAccessLayer.Repositories;
 
 public class CategoryRepository
 {
-    // =====================================================
-    // Get
-    // =====================================================
+    #region Get
 
     public List<Category> GetAll()
     {
@@ -17,15 +13,17 @@ public class CategoryRepository
             new();
 
         return context.Categories
-            .OrderBy(category => category.Name)
+            .OrderBy(
+                category => category.Name)
             .ToList();
     }
 
-    // =====================================================
-    // Add
-    // =====================================================
+    #endregion
 
-    public void Add(Category category)
+    #region Add
+
+    public void Add(
+        Category category)
     {
         using RestaurantDbContext context =
             new();
@@ -35,19 +33,19 @@ public class CategoryRepository
         context.SaveChanges();
     }
 
-    // =====================================================
-    // Delete
-    // =====================================================
+    #endregion
 
-    public void Delete(int id)
+    #region Delete
+
+    public void Delete(
+        int id)
     {
         using RestaurantDbContext context =
             new();
 
         Category? category =
-            context.Categories
-                .FirstOrDefault(
-                    category => category.Id == id);
+            context.Categories.FirstOrDefault(
+                category => category.Id == id);
 
         if (category == null)
         {
@@ -58,4 +56,6 @@ public class CategoryRepository
 
         context.SaveChanges();
     }
+
+    #endregion
 }

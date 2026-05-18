@@ -1,11 +1,8 @@
-﻿// MainWindowViewModel.cs
-
-using BusinessLogicLayer.Helpers;
+﻿using BusinessLogicLayer.Helpers;
 using Models.Enums;
 using RestaurantApp.Views.Auth;
 using RestaurantApp.Views.Customer;
 using RestaurantApp.Views.Employee;
-using RestaurantApp.Views.Shared;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -41,9 +38,7 @@ public class MainWindowViewModel
             RefreshUI;
     }
 
-    // =====================================================
-    // AUTH
-    // =====================================================
+    #region Authentication
 
     public bool IsAuthenticated =>
         SessionManager.IsAuthenticated;
@@ -59,9 +54,9 @@ public class MainWindowViewModel
         SessionManager.CurrentUser?.Role ==
         UserRole.Employee;
 
-    // =====================================================
-    // WELCOME
-    // =====================================================
+    #endregion
+
+    #region Welcome
 
     public string WelcomeText
     {
@@ -77,9 +72,9 @@ public class MainWindowViewModel
         }
     }
 
-    // =====================================================
-    // MAIN CONTENT
-    // =====================================================
+    #endregion
+
+    #region Main Content
 
     public object MainContentView
     {
@@ -94,9 +89,9 @@ public class MainWindowViewModel
         }
     }
 
-    // =====================================================
-    // VISIBILITY
-    // =====================================================
+    #endregion
+
+    #region Visibility
 
     public Visibility GuestButtonsVisibility =>
         IsGuest
@@ -108,18 +103,20 @@ public class MainWindowViewModel
             ? Visibility.Visible
             : Visibility.Collapsed;
 
-    // =====================================================
-    // CART
-    // =====================================================
+    #endregion
+
+    #region Cart
 
     public GridLength CartColumnWidth =>
         IsClient
-            ? new GridLength(1, GridUnitType.Star)
+            ? new GridLength(
+                1,
+                GridUnitType.Star)
             : new GridLength(0);
 
-    // =====================================================
-    // COMMANDS
-    // =====================================================
+    #endregion
+
+    #region Commands
 
     public ICommand OpenLoginCommand
     {
@@ -146,9 +143,9 @@ public class MainWindowViewModel
         get;
     }
 
-    // =====================================================
-    // LOGIN
-    // =====================================================
+    #endregion
+
+    #region Login
 
     private void OpenLogin()
     {
@@ -160,9 +157,9 @@ public class MainWindowViewModel
         RefreshUI();
     }
 
-    // =====================================================
-    // REGISTER
-    // =====================================================
+    #endregion
+
+    #region Register
 
     private void OpenRegister()
     {
@@ -174,9 +171,9 @@ public class MainWindowViewModel
         RefreshUI();
     }
 
-    // =====================================================
-    // LOGOUT
-    // =====================================================
+    #endregion
+
+    #region Logout
 
     private void Logout()
     {
@@ -185,26 +182,23 @@ public class MainWindowViewModel
         RefreshUI();
     }
 
-    // =====================================================
-    // CLIENT ORDERS
-    // =====================================================
+    #endregion
+
+    #region Client Orders
 
     private void OpenOrders()
     {
         Window window =
             new()
             {
-                Title =
-                    "My Orders",
+                Title = "My Orders",
 
                 Content =
                     new OrdersView(),
 
-                Width =
-                    420,
+                Width = 420,
 
-                Height =
-                    560,
+                Height = 560,
 
                 ResizeMode =
                     ResizeMode.NoResize,
@@ -219,9 +213,9 @@ public class MainWindowViewModel
         window.ShowDialog();
     }
 
-    // =====================================================
-    // EMPLOYEE ORDERS
-    // =====================================================
+    #endregion
+
+    #region Employee Orders
 
     private void OpenEmployeeOrders()
     {
@@ -234,11 +228,9 @@ public class MainWindowViewModel
                 Content =
                     new EmployeeOrdersView(),
 
-                Width =
-                    420,
+                Width = 420,
 
-                Height =
-                    560,
+                Height = 560,
 
                 ResizeMode =
                     ResizeMode.NoResize,
@@ -253,28 +245,39 @@ public class MainWindowViewModel
         window.ShowDialog();
     }
 
-    // =====================================================
-    // REFRESH
-    // =====================================================
+    #endregion
+
+    #region Refresh
 
     private void RefreshUI()
     {
-        OnPropertyChanged(nameof(IsAuthenticated));
+        OnPropertyChanged(
+            nameof(IsAuthenticated));
 
-        OnPropertyChanged(nameof(IsGuest));
+        OnPropertyChanged(
+            nameof(IsGuest));
 
-        OnPropertyChanged(nameof(IsClient));
+        OnPropertyChanged(
+            nameof(IsClient));
 
-        OnPropertyChanged(nameof(IsEmployee));
+        OnPropertyChanged(
+            nameof(IsEmployee));
 
-        OnPropertyChanged(nameof(WelcomeText));
+        OnPropertyChanged(
+            nameof(WelcomeText));
 
-        OnPropertyChanged(nameof(MainContentView));
+        OnPropertyChanged(
+            nameof(MainContentView));
 
-        OnPropertyChanged(nameof(GuestButtonsVisibility));
+        OnPropertyChanged(
+            nameof(GuestButtonsVisibility));
 
-        OnPropertyChanged(nameof(LogoutButtonVisibility));
+        OnPropertyChanged(
+            nameof(LogoutButtonVisibility));
 
-        OnPropertyChanged(nameof(CartColumnWidth));
+        OnPropertyChanged(
+            nameof(CartColumnWidth));
     }
+
+    #endregion
 }

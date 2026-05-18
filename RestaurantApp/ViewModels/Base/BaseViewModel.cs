@@ -3,32 +3,44 @@ using System.Runtime.CompilerServices;
 
 namespace ViewModels;
 
-public class BaseViewModel : INotifyPropertyChanged
+public class BaseViewModel
+    : INotifyPropertyChanged
 {
-    public event PropertyChangedEventHandler? PropertyChanged;
+    public event PropertyChangedEventHandler?
+        PropertyChanged;
+
+    #region Property Changed
 
     protected void OnPropertyChanged(
-        [CallerMemberName] string? propertyName = null)
+        [CallerMemberName]
+        string? propertyName = null)
     {
         PropertyChanged?.Invoke(
             this,
-            new PropertyChangedEventArgs(propertyName));
+            new PropertyChangedEventArgs(
+                propertyName));
     }
 
     protected bool SetProperty<T>(
         ref T field,
         T value,
-        [CallerMemberName] string? propertyName = null)
+        [CallerMemberName]
+        string? propertyName = null)
     {
-        if (EqualityComparer<T>.Default.Equals(field, value))
+        if (EqualityComparer<T>.Default.Equals(
+                field,
+                value))
         {
             return false;
         }
 
         field = value;
 
-        OnPropertyChanged(propertyName);
+        OnPropertyChanged(
+            propertyName);
 
         return true;
     }
+
+    #endregion
 }

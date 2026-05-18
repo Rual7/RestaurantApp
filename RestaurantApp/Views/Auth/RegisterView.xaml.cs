@@ -4,7 +4,8 @@ using ViewModels;
 
 namespace RestaurantApp.Views.Auth;
 
-public partial class RegisterView : Window
+public partial class RegisterView
+    : Window
 {
     private readonly RegisterViewModel _viewModel;
 
@@ -12,10 +13,14 @@ public partial class RegisterView : Window
     {
         InitializeComponent();
 
-        _viewModel = new RegisterViewModel();
+        _viewModel =
+            new RegisterViewModel();
 
-        DataContext = _viewModel;
+        DataContext =
+            _viewModel;
     }
+
+    #region Events
 
     private void PasswordBox_PasswordChanged(
         object sender,
@@ -32,4 +37,6 @@ public partial class RegisterView : Window
         _viewModel.ConfirmPassword =
             ((PasswordBox)sender).Password;
     }
+
+    #endregion
 }

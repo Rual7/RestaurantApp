@@ -1,6 +1,4 @@
-﻿// EmployeeSection.cs
-
-namespace Models.Enums;
+﻿namespace Models.Enums;
 
 public enum EmployeeSection
 {

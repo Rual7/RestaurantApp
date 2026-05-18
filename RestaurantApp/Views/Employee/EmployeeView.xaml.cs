@@ -1,6 +1,5 @@
-﻿// EmployeeView.xaml.cs
-
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using ViewModels;
 
 namespace RestaurantApp.Views.Employee;
 
@@ -10,5 +9,8 @@ public partial class EmployeeView
     public EmployeeView()
     {
         InitializeComponent();
+
+        DataContext =
+            new EmployeeViewModel();
     }
 }

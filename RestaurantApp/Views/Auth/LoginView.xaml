@@ -13,7 +13,7 @@
 
     <Window.Resources>
 
-        <!-- TextBox Style -->
+        <!-- TextBox -->
 
         <Style x:Key="ModernTextBoxStyle"
                TargetType="TextBox">
@@ -86,7 +86,7 @@
 
         </Style>
 
-        <!-- PasswordBox Style -->
+        <!-- PasswordBox -->
 
         <Style x:Key="ModernPasswordBoxStyle"
                TargetType="PasswordBox">
@@ -159,7 +159,7 @@
 
         </Style>
 
-        <!-- Button Style -->
+        <!-- Button -->
 
         <Style x:Key="LoginButtonStyle"
                TargetType="Button">
@@ -257,7 +257,8 @@
 
                 <TextBox Margin="0,5,0,2"
                          Style="{StaticResource ModernTextBoxStyle}"
-                         Text="{Binding Email, UpdateSourceTrigger=PropertyChanged}"
+                         Text="{Binding Email,
+                                        UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Example: name@example.com"/>
 
                 <TextBlock Text="{Binding EmailError}"
