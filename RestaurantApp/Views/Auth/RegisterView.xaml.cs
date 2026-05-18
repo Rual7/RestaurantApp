@@ -1,25 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+using ViewModels;
 
-namespace RestaurantApp.Views.Auth
+namespace RestaurantApp.Views.Auth;
+
+public partial class RegisterView : Window
 {
-    /// <summary>
-    /// Interaction logic for RegisterView.xaml
-    /// </summary>
-    public partial class RegisterView : Window
+    private readonly RegisterViewModel _viewModel;
+
+    public RegisterView()
     {
-        public RegisterView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        _viewModel = new RegisterViewModel();
+
+        DataContext = _viewModel;
+    }
+
+    private void PasswordBox_PasswordChanged(
+        object sender,
+        RoutedEventArgs e)
+    {
+        _viewModel.Password =
+            ((PasswordBox)sender).Password;
+    }
+
+    private void ConfirmPasswordBox_PasswordChanged(
+        object sender,
+        RoutedEventArgs e)
+    {
+        _viewModel.ConfirmPassword =
+            ((PasswordBox)sender).Password;
     }
 }

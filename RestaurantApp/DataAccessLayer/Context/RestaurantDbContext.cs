@@ -29,7 +29,9 @@ public class RestaurantDbContext : DbContext
         if (!optionsBuilder.IsConfigured)
         {
             string connectionString =
-                ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+                ConfigurationManager
+                .ConnectionStrings["DefaultConnection"]
+                .ConnectionString;
 
             optionsBuilder.UseNpgsql(connectionString);
         }

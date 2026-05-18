@@ -3,10 +3,198 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:RestaurantApp"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Restaurant App"
+        Height="750"
+        Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F4F4">
+
+    <Window.Resources>
+
+        <!-- Button Style -->
+
+        <Style x:Key="ModernButtonStyle"
+               TargetType="Button">
+
+            <Setter Property="Height"
+                    Value="38"/>
+
+            <Setter Property="FontSize"
+                    Value="14"/>
+
+            <Setter Property="FontWeight"
+                    Value="SemiBold"/>
+
+            <Setter Property="Foreground"
+                    Value="White"/>
+
+            <Setter Property="Background"
+                    Value="#5F5F5F"/>
+
+            <Setter Property="BorderThickness"
+                    Value="0"/>
+
+            <Setter Property="Cursor"
+                    Value="Hand"/>
+
+            <Setter Property="Padding"
+                    Value="18,0"/>
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="Button">
+
+                        <Border x:Name="Border"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8">
+
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#4D4D4D"/>
+
+                            </Trigger>
+
+                            <Trigger Property="IsPressed"
+                                     Value="True">
+
+                                <Setter TargetName="Border"
+                                        Property="Background"
+                                        Value="#3F3F3F"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+    </Window.Resources>
+
     <Grid>
 
+        <!-- Top Navigation -->
+
+        <Border Height="75"
+                Background="White"
+                BorderBrush="#DDDDDD"
+                BorderThickness="0,0,0,1"
+                VerticalAlignment="Top">
+
+            <Grid Margin="24,0">
+
+                <Grid.ColumnDefinitions>
+
+                    <ColumnDefinition Width="*"/>
+
+                    <ColumnDefinition Width="Auto"/>
+
+                </Grid.ColumnDefinitions>
+
+                <!-- Logo / Title -->
+
+                <StackPanel Orientation="Horizontal"
+                            VerticalAlignment="Center">
+
+                    <TextBlock Text="🍽"
+                               FontSize="28"
+                               Margin="0,0,10,0"/>
+
+                    <TextBlock Text="Restaurant App"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="#333333"/>
+
+                </StackPanel>
+
+                <!-- Right Side -->
+
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Center">
+
+                    <!-- Welcome -->
+
+                    <TextBlock Text="{Binding WelcomeText}"
+                               VerticalAlignment="Center"
+                               Margin="0,0,18,0"
+                               FontSize="15"
+                               FontWeight="SemiBold"
+                               Foreground="#555555"/>
+
+                    <!-- Guest Buttons -->
+
+                    <StackPanel Orientation="Horizontal"
+                                Visibility="{Binding GuestButtonsVisibility}">
+
+                        <Button Content="Login"
+                                Width="100"
+                                Margin="0,0,10,0"
+                                Style="{StaticResource ModernButtonStyle}"
+                                Command="{Binding OpenLoginCommand}"/>
+
+                        <Button Content="Register"
+                                Width="100"
+                                Style="{StaticResource ModernButtonStyle}"
+                                Command="{Binding OpenRegisterCommand}"/>
+
+                    </StackPanel>
+
+                    <!-- Logout -->
+
+                    <Button Content="Logout"
+                            Width="100"
+                            Style="{StaticResource ModernButtonStyle}"
+                            Command="{Binding LogoutCommand}"
+                            Visibility="{Binding LogoutButtonVisibility}"/>
+
+                </StackPanel>
+
+            </Grid>
+
+        </Border>
+
+        <!-- Main Content -->
+
+        <Grid Margin="30,105,30,30">
+
+            <Border Background="White"
+                    CornerRadius="14"
+                    BorderBrush="#DDDDDD"
+                    BorderThickness="1">
+
+                <Grid>
+
+                    <TextBlock Text="Restaurant Menu Coming Soon..."
+                               FontSize="36"
+                               FontWeight="Bold"
+                               Foreground="#777777"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+
+                </Grid>
+
+            </Border>
+
+        </Grid>
+
     </Grid>
+
 </Window>
