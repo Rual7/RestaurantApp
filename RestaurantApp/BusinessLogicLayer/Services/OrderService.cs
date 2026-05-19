@@ -108,25 +108,9 @@ public class OrderService
                         userId
                 };
 
-            context.Database.ExecuteSqlRaw(
-                @"CALL sp_place_order(
-                {0}, {1}, {2}, {3},
-                {4}, {5}, {6}, {7}, {8})",
-                order.OrderCode,
-                order.CreatedAt,
-                order.FoodCost,
-                order.DeliveryFee,
-                order.DiscountAmount,
-                order.TotalCost,
-                order.EstimatedDeliveryTime,
-                (int)order.Status,
-                order.UserId);
+            context.Orders.Add(order);
 
-            order =
-                context.Orders
-                    .OrderByDescending(
-                        order => order.Id)
-                    .First();
+            context.SaveChanges();
 
             foreach (CartItem cartItem in cartItems)
             {
@@ -192,7 +176,9 @@ public class OrderService
                                     menu.Id ==
                                     cartItem.Menu!.Id)
                             .Include(menu => menu.MenuDishes)
-                                .ThenInclude(menuDish => menuDish.Dish)
+                                .ThenInclude(
+                                    menuDish =>
+                                        menuDish.Dish)
                             .First();
 
                     decimal total =
