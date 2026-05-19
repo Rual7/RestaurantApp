@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Context;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace DataAccessLayer.Repositories;
@@ -22,15 +23,14 @@ public class CategoryRepository
 
     #region Add
 
-    public void Add(
-        Category category)
+    public void Add(Category category)
     {
         using RestaurantDbContext context =
             new();
 
-        context.Categories.Add(category);
-
-        context.SaveChanges();
+        context.Database.ExecuteSqlRaw(
+            "CALL sp_add_category({0})",
+            category.Name);
     }
 
     #endregion

@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Context;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace DataAccessLayer.Repositories;
@@ -22,15 +23,14 @@ public class AllergenRepository
 
     #region Add
 
-    public void Add(
-        Allergen allergen)
+    public void Add(Allergen allergen)
     {
         using RestaurantDbContext context =
             new();
 
-        context.Allergens.Add(allergen);
-
-        context.SaveChanges();
+        context.Database.ExecuteSqlRaw(
+            "CALL sp_add_allergen({0})",
+            allergen.Name);
     }
 
     #endregion

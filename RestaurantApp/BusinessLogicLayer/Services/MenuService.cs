@@ -1,4 +1,6 @@
-﻿using DataAccessLayer.Repositories;
+﻿using DataAccessLayer.Context;
+using DataAccessLayer.Repositories;
+using Microsoft.EntityFrameworkCore;
 using Models;
 
 namespace BusinessLogicLayer.Services;
@@ -19,8 +21,16 @@ public class MenuService
 
     public List<Dish> GetMenu()
     {
-        return _dishRepository
-            .GetAllAvailable();
+        using RestaurantDbContext context =
+            new();
+
+        return context.Dishes
+            .FromSqlRaw(
+                "SELECT * FROM sp_get_menu()")
+            .Include(dish => dish.Category)
+            .Include(dish => dish.DishAllergens)
+                .ThenInclude(da => da.Allergen)
+            .ToList();
     }
 
     #endregion

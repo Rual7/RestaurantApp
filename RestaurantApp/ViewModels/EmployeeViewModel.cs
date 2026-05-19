@@ -1,4 +1,6 @@
 ﻿using BusinessLogicLayer.Services;
+using DataAccessLayer.Context;
+using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.Enums;
 using System.Collections.ObjectModel;
@@ -37,11 +39,15 @@ public class EmployeeViewModel
             new ObservableCollection<Allergen>(
                 _allergenService.GetAll());
 
+        using RestaurantDbContext context =
+            new();
+
         LowStockDishes =
             new ObservableCollection<Dish>(
-                _menuService.GetMenu()
-                    .Where(
-                        dish => dish.TotalQuantity <= 5));
+                context.Dishes
+                    .FromSqlRaw(
+                        "SELECT * FROM sp_get_low_stock()")
+                    .ToList());
 
         AddCategoryCommand =
             new RelayCommand(

@@ -119,10 +119,9 @@ public class OrderRepository
             return false;
         }
 
-        order.Status =
-            OrderStatus.Cancelled;
-
-        context.SaveChanges();
+        context.Database.ExecuteSqlRaw(
+            "CALL sp_cancel_order({0})",
+            orderId);
 
         return true;
     }
@@ -143,9 +142,10 @@ public class OrderRepository
             return;
         }
 
-        order.Status = status;
-
-        context.SaveChanges();
+        context.Database.ExecuteSqlRaw(
+            "CALL sp_update_order_status({0}, {1})",
+            orderId,
+            (int)status);
     }
 
     #endregion

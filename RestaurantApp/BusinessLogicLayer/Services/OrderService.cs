@@ -108,9 +108,25 @@ public class OrderService
                         userId
                 };
 
-            context.Orders.Add(order);
+            context.Database.ExecuteSqlRaw(
+                @"CALL sp_place_order(
+                {0}, {1}, {2}, {3},
+                {4}, {5}, {6}, {7}, {8})",
+                order.OrderCode,
+                order.CreatedAt,
+                order.FoodCost,
+                order.DeliveryFee,
+                order.DiscountAmount,
+                order.TotalCost,
+                order.EstimatedDeliveryTime,
+                (int)order.Status,
+                order.UserId);
 
-            context.SaveChanges();
+            order =
+                context.Orders
+                    .OrderByDescending(
+                        order => order.Id)
+                    .First();
 
             foreach (CartItem cartItem in cartItems)
             {
@@ -146,14 +162,20 @@ public class OrderService
                                 cartItem.Quantity,
 
                             Price =
-                                Math.Round(dish.Price, 2)
+                                Math.Round(
+                                    dish.Price,
+                                    2)
                         };
 
                     context.OrderItems.Add(
                         orderItem);
 
-                    dish.TotalQuantity -=
-                        requiredQuantity;
+                    context.Database.ExecuteSqlRaw(
+                        "CALL sp_update_dish_stock({0}, {1})",
+                        dish.Id,
+                        requiredQuantity);
+
+                    context.Entry(dish).Reload();
 
                     if (dish.TotalQuantity <
                         dish.PortionQuantity)
@@ -224,8 +246,12 @@ public class OrderService
                                 $"{dish.Name} is unavailable.");
                         }
 
-                        dish.TotalQuantity -=
-                            requiredQuantity;
+                        context.Database.ExecuteSqlRaw(
+                            "CALL sp_update_dish_stock({0}, {1})",
+                            dish.Id,
+                            requiredQuantity);
+
+                        context.Entry(dish).Reload();
 
                         if (dish.TotalQuantity <
                             dish.PortionQuantity)
